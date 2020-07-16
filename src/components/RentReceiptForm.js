@@ -1,23 +1,28 @@
 import React from 'react';
 
 import { FormGroup, FormControl } from 'react-bootstrap';
+
+import { PDFDownloadLink } from '@react-pdf/renderer';
+
 import './RentReceiptForm.css';
+
+import MyDocument from "./RentReceiptDocument";
 
 export default class RentReceiptForm extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            'ownerFirstName' : "Jonathan",
-            'ownerLastName' : "BEAUCOUSIN",
-            'tenantFirstName' : "Léa",
-            'tenantLastName' : "LIMOGES",
-            'adresse' : "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance",
-            'dateTransmission' : "2020-07-02",
-            'periodeStart' : "2020-07-02",
-            'periodeEnd' : "2020-07-02",
-            'rent' : 450,
-            'charges' : 0
+            'ownerFirstName': "Jonathan",
+            'ownerLastName': "BEAUCOUSIN",
+            'tenantFirstName': "Léa",
+            'tenantLastName': "LIMOGES",
+            'adresse': "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance",
+            'dateTransmission': "2020-07-02",
+            'periodeStart': "2020-07-02",
+            'periodeEnd': "2020-07-02",
+            'rent': 450,
+            'charges': 0
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -96,6 +101,9 @@ export default class RentReceiptForm extends React.Component {
                 </FormGroup>
 
                 <input type="submit" value="Générer" />
+                <PDFDownloadLink document={<MyDocument />} fileName="somename.pdf">
+                    {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
+                </PDFDownloadLink>
             </form>
         );
     }

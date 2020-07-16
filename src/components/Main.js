@@ -20,7 +20,7 @@ class Main extends Component {
                     <RentReceiptForm />
                 </Jumbotron>
 
-                <PDFViewer className="row" style="width:100%;">
+                <PDFViewer className="row">
                     <MyDocument />
                 </PDFViewer>
             </Container>
