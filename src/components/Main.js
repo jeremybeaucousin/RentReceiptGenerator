@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 
 import { Container, Navbar, NavbarBrand, Jumbotron } from 'react-bootstrap';
+import { PDFViewer } from '@react-pdf/renderer';
 
 import RentReceiptForm from "./RentReceiptForm";
+import MyDocument from "./RentReceiptDocument";
 
 class Main extends Component {
     render() {
@@ -17,6 +19,10 @@ class Main extends Component {
                 <Jumbotron className="content">
                     <RentReceiptForm />
                 </Jumbotron>
+
+                <PDFViewer className="row" style="width:100%;">
+                    <MyDocument />
+                </PDFViewer>
             </Container>
         );
     }
