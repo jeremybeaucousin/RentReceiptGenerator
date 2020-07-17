@@ -13,7 +13,7 @@ export default class RentReceiptForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            receipt: props.receipt,
+            receipt: this.props.receipt,
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -29,10 +29,11 @@ export default class RentReceiptForm extends React.Component {
             return { receipt };
           }
         );
+        this.props.onReceiptChange(this.state.receipt);
     }
 
     handleSubmit(event) {
-        alert('A name was submitted: ' + this.state.receipt);
+        alert('A name was submitted: ' + this.props.receipt);
         event.preventDefault();
     }
 
@@ -95,7 +96,7 @@ export default class RentReceiptForm extends React.Component {
                     <FormControl type="number" name="charge" id="RentReceiptFormCharges" value={this.state.receipt.charges} onChange={this.handleChange} />
                 </FormGroup>
                 <FormGroup>
-                    <PDFDownloadLink document={<MyDocument />} className="col-sm-12 btn btn-primary" fileName="somename.pdf">
+                    <PDFDownloadLink document={<MyDocument receipt={this.state.receipt}/>} className="col-sm-12 btn btn-primary" fileName="somename.pdf">
                         {({ blob, url, loading, error }) => (loading ? 'Document en cours de chargement...' : 'Télécharger !')}
                     </PDFDownloadLink>
                 </FormGroup>

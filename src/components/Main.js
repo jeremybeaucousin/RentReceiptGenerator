@@ -28,6 +28,10 @@ class Main extends Component {
         }
     }
 
+    onReceiptChange = receipt => {
+        this.setState({ receipt: receipt });
+      }
+  
     render() {
         return (
             <Container>
@@ -38,11 +42,11 @@ class Main extends Component {
                 </Navbar>
 
                 <Jumbotron className="content">
-                    <RentReceiptForm receipt={this.state.receipt} />
+                    <RentReceiptForm receipt={this.state.receipt} onReceiptChange={this.onReceiptChange} />
                 </Jumbotron>
-
-                <PDFViewer className="row">
-                    <MyDocument />
+                
+                <PDFViewer width="100%" height="1100">
+                    <MyDocument receipt={this.state.receipt} />
                 </PDFViewer>
             </Container>
         );
