@@ -24,12 +24,17 @@ export default class RentReceiptForm extends React.Component {
         const value = event.target.value;
         const receiptColumn = event.target.name;
         this.setState(prevState => {
-            let receipt = Object.assign({}, prevState.receipt); 
+            let receipt = Object.assign({}, prevState.receipt);
             receipt[receiptColumn] = value;
             return { receipt };
-          }
+        }
         );
-        this.props.onReceiptChange(this.state.receipt);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.receipt !== this.state.receipt) {
+            this.props.onReceiptChange(this.state.receipt);
+        }
     }
 
     handleSubmit(event) {
@@ -96,9 +101,9 @@ export default class RentReceiptForm extends React.Component {
                     <FormControl type="number" name="charge" id="RentReceiptFormCharges" value={this.state.receipt.charges} onChange={this.handleChange} />
                 </FormGroup>
                 <FormGroup>
-                    <PDFDownloadLink document={<MyDocument receipt={this.state.receipt}/>} className="col-sm-12 btn btn-primary" fileName="somename.pdf">
+                    {/* <PDFDownloadLink document={<MyDocument receipt={this.state.receipt} />} className="col-sm-12 btn btn-primary" fileName="somename.pdf">
                         {({ blob, url, loading, error }) => (loading ? 'Document en cours de chargement...' : 'Télécharger !')}
-                    </PDFDownloadLink>
+                    </PDFDownloadLink> */}
                 </FormGroup>
             </form>
         );

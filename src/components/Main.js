@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import { Container, Navbar, NavbarBrand, Jumbotron } from 'react-bootstrap';
-import { PDFViewer } from '@react-pdf/renderer';
+import { PDFViewer, BlobProvider } from '@react-pdf/renderer';
 
 import RentReceiptForm from "./RentReceiptForm";
 import MyDocument from "./RentReceiptDocument";
@@ -30,8 +30,8 @@ class Main extends Component {
 
     onReceiptChange = receipt => {
         this.setState({ receipt: receipt });
-      }
-  
+    }
+
     render() {
         return (
             <Container>
@@ -44,6 +44,10 @@ class Main extends Component {
                 <Jumbotron className="content">
                     <RentReceiptForm receipt={this.state.receipt} onReceiptChange={this.onReceiptChange} />
                 </Jumbotron>
+
+                {/* <BlobProvider document={MyDocument({ receipt: this.state.receipt })}>
+                    {({ url }) => <iframe src={url} style={{ width: '100%', height: '1100px' }} />}
+                </BlobProvider> */}
                 
                 <PDFViewer width="100%" height="1100">
                     <MyDocument receipt={this.state.receipt} />
