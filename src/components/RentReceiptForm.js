@@ -6,7 +6,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 
 import './RentReceiptForm.css';
 
-import MyDocument from "./RentReceiptDocument";
+import RentReceiptDocument from "./RentReceiptDocument";
 
 export default class RentReceiptForm extends React.Component {
 
@@ -101,9 +101,13 @@ export default class RentReceiptForm extends React.Component {
                     <FormControl type="number" name="charge" id="RentReceiptFormCharges" value={this.state.receipt.charges} onChange={this.handleChange} />
                 </FormGroup>
                 <FormGroup>
-                    {/* <PDFDownloadLink document={<MyDocument receipt={this.state.receipt} />} className="col-sm-12 btn btn-primary" fileName="somename.pdf">
-                        {({ blob, url, loading, error }) => (loading ? 'Document en cours de chargement...' : 'Télécharger !')}
-                    </PDFDownloadLink> */}
+                    {/* { receipt && ( */}
+                        <PDFDownloadLink document={<RentReceiptDocument receipt={this.state.receipt} />} className="col-sm-12 btn btn-primary" fileName="somename.pdf">
+                            {
+                                ({ blob, url, loading, error }) => (loading && blob && url ? 'Document en cours de chargement...' : 'Télécharger !')
+                            }
+                        </PDFDownloadLink>
+                        {/* )} */}
                 </FormGroup>
             </form>
         );
