@@ -98,8 +98,8 @@ export default class RentReceiptForm extends React.Component {
                 </FormGroup>
 
                 <FormGroup >
-                    <label htmlFor="RentReceiptFormOwnerAdresse"> Adresse du propriétaire : </label>
-                    <textarea className="form-control textarea-autosize" name="ownerAdresse" id="RentReceiptFormOwnerAdresse" value={this.state.receipt.ownerAdress} onChange={this.handleChange} />
+                    <label htmlFor="RentReceiptFormOwnerAdress"> Adresse du propriétaire : </label>
+                    <textarea className="form-control textarea-autosize" name="ownerAdress" id="RentReceiptFormOwnerAdress" value={this.state.receipt.ownerAdress} onChange={this.handleChange} />
                 </FormGroup>
 
                 <FormGroup className="row">
