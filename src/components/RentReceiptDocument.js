@@ -1,78 +1,125 @@
-import React from 'react';
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+function convertDateToString(date) {
+  let string = "";
+  console.log(date);
+  console.log(date instanceof Date);
+  if(date && date instanceof Date) {
+      var d = date.getDate();
+      var m = date.getMonth() + 1;
+      var y = date.getFullYear();
+      return `${(d <= 9 ? '0' + d : d)}/${(m<=9 ? '0' + m : m)}/${y}`;
+  } 
+  return string;
+}
 
-let LOADING = false;
+export function getDocumentDefinition(receipt) {
+  pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-export default class RentReceiptDocument extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      receipt: this.props.receipt,
-    };
-  }
-
-  styles = StyleSheet.create({
-
-    titleContainer: {
-      flexDirection: 'row',
-      marginTop: 24,
+  console.log(receipt);
+  const dateTransmission = convertDateToString(receipt.dateTransmission);
+  const periodeStart = convertDateToString(receipt.periodeStart);
+  const periodeEnd = convertDateToString(receipt.periodeEnd);
+  return {
+    pageSize: 'A4',
+    pageOrientation: 'portrait',
+    styles: {
+      table: {
+        width: "auto"
+      }
     },
-    reportTitle: {
-      color: '#61dafb',
-      letterSpacing: 4,
-      fontSize: 25,
-      textAlign: 'center',
-      textTransform: 'uppercase',
-    }
-  });
+    content: [
+      '\n\n\n',
+      {
+        text: 'Avis d\'échéance',
+        fontSize: 30,
+        alignment: 'center'
+      },
+      '\n\n\n',
+      {
+        text: `Avis d\'échéance émis le ${dateTransmission}`,
+        alignment: 'right'
+      },
+      '\n\n\n',
+      {
+        columns: [
+          [
+            {
+              text: 'Propriétaire',
+              alignment: 'left',
+              bold: true,
+              decoration: 'underline',
+            },
+            {
+              text: `${receipt.ownerFirstName} ${receipt.ownerLastName}\n${receipt.ownerAdress}`,
+              alignment: 'left',
+            }
+          ],
+          [
+            {
+              text: 'Locataire',
+              alignment: 'right',
+              bold: true,
+              decoration: 'underline',
+            },
+            {
+              text: `${receipt.tenantFirstName} ${receipt.tenantLastName}\n${receipt.adress}`,
+              alignment: 'right',
+            }
+          ]
+        ]
+      },
+      {
+        width: 'auto',
+        headerRows: 1,
+        widths: [ '100%', '100%' ],
+        margin: [70, 100  ],
+        table: {
+          dontBreakRows: true,
+          body: [
+            [
+              { text: 'Adresse du bien' },
+              { text: 'Adresse logement' },
+            ],
+            [
+              { text: 'Loyer mensuel contractuel' },
+              { text: `${receipt.rent} €` },
+            ],
+            [
+              { text: 'Charges mensuelles contractuelles' },
+              { text: `${receipt.charges} €` },
+            ],
+            [
+              { text: 'Période concerné' },
+              { text: `Du ${periodeStart} au ${periodeEnd}` },
+            ],
+            [
+              { text: 'Somme due' },
+              { text: `${(receipt.rent + receipt.charges)} €` },
+            ],
+            [
+              { text: 'Date d\'exigibilité' },
+              { text: `Au plus tard le ` },
+            ]
+          ]
+        }
+      },
+      {
+        text: 'Rappels importants',
+        alignment: 'left',
+        bold: true,
+        decoration: 'underline',
+      },
+      {
+        ul: [
+          'Cet avis d\'échéance ne vaut pas quittance',
+        ]
+      },
+    ]
+  };
+}
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.receipt !== this.props.receipt) {
-      this.setState({
-        receipt: this.props.receipt
-      });
-    }
-  }
-
-  componentDidMount() {
-    this.setState({
-      receipt: this.props.receipt
-    });
-
-    this.setState({ ready: false });
-    setTimeout(() => {
-      this.setState({ ready: true });
-    }, 1);
-  }
-
-  shouldComponentUpdate(nextProps, nextState, nextContext) {
-    return !LOADING
-  }
-
-  render() {
-    console.log(this.state.receipt);
-    return (
-      <Document onRender={() => { LOADING = false; }}>
-        <Page size="A4" style={this.styles.page} wrap={false}>
-          <View style={this.styles.section}>
-            <Text >{this.state.receipt.ownerFirstName}</Text>
-            <Text >{this.state.receipt.ownerLastName}</Text>
-            <Text >{this.state.receipt.tenantFirstName}</Text>
-            <Text >{this.state.receipt.tenantLastName}</Text>
-            <Text >{this.state.receipt.adresse}</Text>
-            <Text >{this.state.receipt.dateTransmission}</Text>
-            <Text >{this.state.receipt.periodeStart}</Text>
-            <Text >{this.state.receipt.periodeEnd}</Text>
-            <Text >{this.state.receipt.rent}</Text>
-            <Text >{this.state.receipt.charges}</Text>
-          </View>
-          <View style={this.styles.section}>
-            <Text>Section #2</Text>
-          </View>
-        </Page>
-      </Document>
-    );
-  }
+export function pdfMakeTable(receipt) {
+  return pdfMake.createPdf(getDocumentDefinition(receipt)).download("avis_echeance");
 }

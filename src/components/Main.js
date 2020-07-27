@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import pdfMake from "pdfmake/build/pdfmake";
 
 import { Container, Navbar, NavbarBrand, Jumbotron } from 'react-bootstrap';
-import { PDFViewer } from '@react-pdf/renderer';
 
 import RentReceiptForm from "./RentReceiptForm";
-import RentReceiptDocument from "./RentReceiptDocument";
 import Receipt from "../model/Receipt";
+import { getDocumentDefinition } from './RentReceiptDocument';
+
 
 class Main extends Component {
     constructor(props) {
@@ -13,26 +14,50 @@ class Main extends Component {
         let receipt = new Receipt(
             "Jonathan",
             "BEAUCOUSIN",
+            "13 rue tadhomme\n76620 Le Havre\nFrance",
             "Léa",
             "LIMOGES",
             "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance",
-            "2020-07-02",
-            "2020-07-02",
-            "2020-07-02",
+            new Date(),
+            null,
+            null,
             450,
             0
         );
 
         this.state = {
-            receipt: receipt
+            receipt: receipt,
         }
     }
 
     onReceiptChange = receipt => {
         this.setState({ receipt: receipt });
+        this.reloadPdf();
+        
+    }
+
+    reloadPdf() {
+        const pdfDocGenerator = pdfMake.createPdf(getDocumentDefinition(this.state.receipt));
+        pdfDocGenerator.getDataUrl((dataUrl) => {
+            const targetElement = document.querySelector('#iframePdf');
+            let iframe = targetElement.querySelector('iframe');
+            let newIframe = false;
+            if (!iframe) {
+                newIframe = true;
+                iframe = document.createElement('iframe');
+                iframe.width = "100%";
+                iframe.height = "1100px";
+            }
+            iframe.src = dataUrl;
+            if (newIframe) {
+                targetElement.appendChild(iframe);
+            }
+        }
+        );
     }
 
     render() {
+        this.reloadPdf();
         return (
             <Container>
                 <Navbar className="navbar-light bg-light">
@@ -45,9 +70,7 @@ class Main extends Component {
                     <RentReceiptForm receipt={this.state.receipt} onReceiptChange={this.onReceiptChange} />
                 </Jumbotron>
 
-                <PDFViewer width="100%" height="1100">
-                    <RentReceiptDocument receipt={this.state.receipt} />
-                </PDFViewer>
+                <div width="100%" height="1100" id="iframePdf" />
             </Container>
         );
     }
