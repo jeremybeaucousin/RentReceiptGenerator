@@ -9,6 +9,7 @@ export function getDocumentDefinition(receipt) {
   const dateTransmission = convertDateToDisplayedString(receipt.dateTransmission);
   const periodeStart = convertDateToDisplayedString(receipt.periodeStart);
   const periodeEnd = convertDateToDisplayedString(receipt.periodeEnd);
+  const dueDate = convertDateToDisplayedString(receipt.dueDate);
   return {
     pageSize: 'A4',
     pageOrientation: 'portrait',
@@ -88,7 +89,7 @@ export function getDocumentDefinition(receipt) {
             ],
             [
               { text: 'Date d\'exigibilité' },
-              { text: `Au plus tard le ` },
+              { text: `Au plus tard le ${dueDate}` },
             ]
           ]
         }

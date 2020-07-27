@@ -15,6 +15,7 @@ export default class RentReceiptForm extends React.Component {
         let receipt = this.props.receipt;
 
         receipt = this.calculatePeriodesFromDateTransmission(receipt);
+        receipt = this.calculateDueDateFromDateTransmission(receipt);
         this.state = {
             receipt: receipt,
         };
@@ -42,6 +43,7 @@ export default class RentReceiptForm extends React.Component {
             // Refresh periode dates
             if(receiptColumn === "dateTransmission") {
                 receipt = this.calculatePeriodesFromDateTransmission(receipt);
+                receipt = this.calculateDueDateFromDateTransmission(receipt);
             }
     
             return { receipt };
@@ -78,6 +80,19 @@ export default class RentReceiptForm extends React.Component {
         // Last day of month
         const periodeEnd = new Date(y, m + 1, 0);
         receipt.periodeEnd = periodeEnd;
+        return receipt;
+    }
+
+    calculateDueDateFromDateTransmission(receipt) {
+        // Initialization if empty
+        if(!receipt.dateTransmission) {
+            receipt.dateTransmission = new Date();
+        }
+        const dateTransmission = receipt.dateTransmission, y = dateTransmission.getFullYear(), m = dateTransmission.getMonth();
+
+        const dueDate = new Date(y, m + 1, 5);
+        receipt.dueDate = dueDate;
+
         return receipt;
     }
 
@@ -144,6 +159,12 @@ export default class RentReceiptForm extends React.Component {
                     <label htmlFor="RentReceiptFormCharges"> Charges mensuelles contractuelles : </label>
                     <FormControl type="number" name="charges" id="RentReceiptFormCharges" value={this.state.receipt.charges} onChange={this.handleChange} />
                 </FormGroup>
+
+                <FormGroup >
+                    <label htmlFor="RentReceiptFormDueDate"> Date d'exigibilité : </label>
+                    <FormControl type="date" name="dueDate" id="RentReceiptFormDueDate" value={convertDateToStringInput(this.state.receipt.dueDate)} onChange={this.handleChange} />
+                </FormGroup>
+
                 <FormGroup>
                     <button className="col-sm-12 btn btn-primary" onClick={this._exportPdfTable}>Télécharger !</button>
                 </FormGroup>

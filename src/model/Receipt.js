@@ -10,7 +10,8 @@ export default class Receipt {
     periodeStart,
     periodeEnd,
     rent,
-    charges
+    charges,
+    dueDate,
   ) {
     this.ownerFirstName = ownerFirstName;
     this.ownerLastName = ownerLastName;
@@ -23,5 +24,6 @@ export default class Receipt {
     this.periodeEnd = periodeEnd;
     this.rent = rent;
     this.charges = charges;
+    this.dueDate = dueDate;
   }
 }
