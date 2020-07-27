@@ -3,8 +3,6 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 
 function convertDateToString(date) {
   let string = "";
-  console.log(date);
-  console.log(date instanceof Date);
   if(date && date instanceof Date) {
       var d = date.getDate();
       var m = date.getMonth() + 1;
@@ -17,7 +15,6 @@ function convertDateToString(date) {
 export function getDocumentDefinition(receipt) {
   pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-  console.log(receipt);
   const dateTransmission = convertDateToString(receipt.dateTransmission);
   const periodeStart = convertDateToString(receipt.periodeStart);
   const periodeEnd = convertDateToString(receipt.periodeEnd);

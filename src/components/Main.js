@@ -11,6 +11,7 @@ import { getDocumentDefinition } from './RentReceiptDocument';
 class Main extends Component {
     constructor(props) {
         super(props);
+        const today = new Date();
         let receipt = new Receipt(
             "Jonathan",
             "BEAUCOUSIN",
@@ -18,9 +19,9 @@ class Main extends Component {
             "Léa",
             "LIMOGES",
             "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance",
-            new Date(),
-            null,
-            null,
+            today,
+            today,
+            today,
             450,
             0
         );

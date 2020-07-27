@@ -10,18 +10,9 @@ export default class RentReceiptForm extends React.Component {
 
     constructor(props) {
         super(props);
-        const receipt = this.props.receipt;
+        let receipt = this.props.receipt;
 
-        let periodeStart = receipt.periodeStart;
-        if(!periodeStart) {
-            receipt.periodeStart = new Date();
-        }
-
-        let periodeEnd = receipt.periodeEnd;
-        if(!periodeEnd) {
-            receipt.periodeEnd = new Date();
-        }
-
+        receipt = this.calculatePeriodesFromDateTransmission(receipt);
         this.state = {
             receipt: receipt,
         };
@@ -46,6 +37,11 @@ export default class RentReceiptForm extends React.Component {
             }
 
             receipt[receiptColumn] = value;
+            // Refresh periode dates
+            if(receiptColumn === "dateTransmission") {
+                receipt = this.calculatePeriodesFromDateTransmission(receipt);
+            }
+    
             return { receipt };
         });
     }
@@ -75,6 +71,23 @@ export default class RentReceiptForm extends React.Component {
 
     _exportPdfTable = () => {
         pdfMakeTable(this.state.receipt);
+    }
+
+    calculatePeriodesFromDateTransmission(receipt) {
+        // Initialization if empty
+        if(!receipt.dateTransmission) {
+            receipt.dateTransmission = new Date();
+        }
+        const dateTransmission = receipt.dateTransmission, y = dateTransmission.getFullYear(), m = dateTransmission.getMonth();
+
+        // First day of month
+        const periodeStart = new Date(y, m, 1);
+        receipt.periodeStart = periodeStart;
+
+        // Last day of month
+        const periodeEnd = new Date(y, m + 1, 0);
+        receipt.periodeEnd = periodeEnd;
+        return receipt;
     }
 
     render() {
