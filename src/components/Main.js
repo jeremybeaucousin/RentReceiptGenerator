@@ -60,17 +60,19 @@ class Main extends Component {
         this.reloadPdf();
         return (
             <Container>
-                <Navbar className="navbar-light bg-light">
+                <Navbar className="row navbar-light bg-light">
                     <NavbarBrand href="#">
                         <h3>Générateur de quittance de loyer</h3>
                     </NavbarBrand>
                 </Navbar>
 
-                <Jumbotron className="content">
+            <div className="row">
+                <Jumbotron className="content col-sm-6">
                     <RentReceiptForm receipt={this.state.receipt} onReceiptChange={this.onReceiptChange} />
                 </Jumbotron>
 
-                <div width="100%" height="1100" id="iframePdf" />
+                <div className="col-sm-6" width="100%" id="iframePdf" />
+            </div>
             </Container>
         );
     }
