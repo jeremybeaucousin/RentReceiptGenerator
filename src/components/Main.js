@@ -5,7 +5,7 @@ import { Container, Navbar, NavbarBrand, Jumbotron } from 'react-bootstrap';
 
 import RentReceiptForm from "./RentReceiptForm";
 import Receipt from "../model/Receipt";
-import { getDocumentDefinition } from './RentReceiptDocument';
+import { getDocumentDefinition } from '../model/RentReceiptDocument';
 
 
 class Main extends Component {

@@ -1,23 +1,14 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 
-function convertDateToString(date) {
-  let string = "";
-  if(date && date instanceof Date) {
-      var d = date.getDate();
-      var m = date.getMonth() + 1;
-      var y = date.getFullYear();
-      return `${(d <= 9 ? '0' + d : d)}/${(m<=9 ? '0' + m : m)}/${y}`;
-  } 
-  return string;
-}
+import { convertDateToDisplayedString, convertDateToStringInputWithSeparator } from "../utils/DateUtils";
 
 export function getDocumentDefinition(receipt) {
   pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-  const dateTransmission = convertDateToString(receipt.dateTransmission);
-  const periodeStart = convertDateToString(receipt.periodeStart);
-  const periodeEnd = convertDateToString(receipt.periodeEnd);
+  const dateTransmission = convertDateToDisplayedString(receipt.dateTransmission);
+  const periodeStart = convertDateToDisplayedString(receipt.periodeStart);
+  const periodeEnd = convertDateToDisplayedString(receipt.periodeEnd);
   return {
     pageSize: 'A4',
     pageOrientation: 'portrait',
@@ -71,7 +62,7 @@ export function getDocumentDefinition(receipt) {
         width: 'auto',
         headerRows: 1,
         widths: [ '100%', '100%' ],
-        margin: [70, 100  ],
+        margin: [ 70, 100 ],
         table: {
           dontBreakRows: true,
           body: [
@@ -118,5 +109,5 @@ export function getDocumentDefinition(receipt) {
 }
 
 export function pdfMakeTable(receipt) {
-  return pdfMake.createPdf(getDocumentDefinition(receipt)).download("avis_echeance");
+  return pdfMake.createPdf(getDocumentDefinition(receipt)).download(`avis_echeance_${convertDateToStringInputWithSeparator(receipt.dateTransmission, "_")}`);
 }

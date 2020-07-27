@@ -4,7 +4,9 @@ import { FormGroup, FormControl } from 'react-bootstrap';
 
 import './RentReceiptForm.css';
 
-import { pdfMakeTable } from './RentReceiptDocument';
+import { pdfMakeTable } from '../model/RentReceiptDocument';
+
+import { convertDateToStringInput } from "../utils/DateUtils";
 
 export default class RentReceiptForm extends React.Component {
 
@@ -56,17 +58,6 @@ export default class RentReceiptForm extends React.Component {
         if((this.props.receipt !== this.state.receipt) || (prevState.receipt !== this.state.receipt)) {
             this.props.onReceiptChange(this.state.receipt);
         }
-    }
-
-    convertDateToStringInput(date) {
-        let stringInput = "";
-        if(date && date instanceof Date) {
-            var d = date.getDate();
-            var m = date.getMonth() + 1;
-            var y = date.getFullYear();
-            return `${y}-${(m<=9 ? '0' + m : m)}-${(d <= 9 ? '0' + d : d)}`;
-        } 
-        return stringInput;
     }
 
     _exportPdfTable = () => {
@@ -129,17 +120,17 @@ export default class RentReceiptForm extends React.Component {
 
                 <FormGroup >
                     <label htmlFor="RentReceiptFormDateTransmission"> Date d'émission de la quittance : </label>
-                    <FormControl type="date" name="dateTransmission" id="RentReceiptFormDateTransmission" value={this.convertDateToStringInput(this.state.receipt.dateTransmission)} onChange={this.handleChange} />
+                    <FormControl type="date" name="dateTransmission" id="RentReceiptFormDateTransmission" value={convertDateToStringInput(this.state.receipt.dateTransmission)} onChange={this.handleChange} />
                 </FormGroup>
 
                 <FormGroup className="row">
                     <div className="col-sm-6">
                         <label htmlFor="RentReceiptFormPeriodeStart"> Début de la période concernée : </label>
-                        <FormControl type="date" name="periodeStart" id="RentReceiptFormPeriodeStart" value={this.convertDateToStringInput(this.state.receipt.periodeStart)} onChange={this.handleChange} />
+                        <FormControl type="date" name="periodeStart" id="RentReceiptFormPeriodeStart" value={convertDateToStringInput(this.state.receipt.periodeStart)} onChange={this.handleChange} />
                     </div>
                     <div className="col-sm-6">
                         <label htmlFor="RentReceiptFormPeriodeEnd"> Fin de la période concernée : </label>
-                        <FormControl type="date" name="periodeEnd" id="RentReceiptFormPeriodeEnd" value={this.convertDateToStringInput(this.state.receipt.periodeEnd)} onChange={this.handleChange} />
+                        <FormControl type="date" name="periodeEnd" id="RentReceiptFormPeriodeEnd" value={convertDateToStringInput(this.state.receipt.periodeEnd)} onChange={this.handleChange} />
                     </div>
 
                 </FormGroup>
