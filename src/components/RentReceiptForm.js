@@ -15,7 +15,6 @@ export default class RentReceiptForm extends React.Component {
         let receipt = this.props.receipt;
 
         receipt = this.calculatePeriodesFromDateTransmission(receipt);
-        receipt = this.calculateDueDateFromDateTransmission(receipt);
         this.state = {
             receipt: receipt,
         };
@@ -30,22 +29,21 @@ export default class RentReceiptForm extends React.Component {
         this.setState(prevState => {
             let receipt = Object.assign({}, prevState.receipt);
             // Parse number from string
-            if(value && ["rent", "charges"].includes(receiptColumn)) {
+            if (value && ["rent", "charges"].includes(receiptColumn)) {
                 value = parseFloat(value);
             }
-            
+
             // Parse date from string
-             if(value && ["dateTransmission", "periodeStart" , "periodeEnd"].includes(receiptColumn)) {
+            if (value && ["dateTransmission", "periodeStart", "periodeEnd", "paidDate"].includes(receiptColumn)) {
                 value = new Date(value);
             }
 
             receipt[receiptColumn] = value;
             // Refresh periode dates
-            if(receiptColumn === "dateTransmission") {
+            if (receiptColumn === "dateTransmission") {
                 receipt = this.calculatePeriodesFromDateTransmission(receipt);
-                receipt = this.calculateDueDateFromDateTransmission(receipt);
             }
-    
+
             return { receipt };
         });
     }
@@ -57,7 +55,7 @@ export default class RentReceiptForm extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         // First condition is for initiatlisation
-        if((this.props.receipt !== this.state.receipt) || (prevState.receipt !== this.state.receipt)) {
+        if ((this.props.receipt !== this.state.receipt) || (prevState.receipt !== this.state.receipt)) {
             this.props.onReceiptChange(this.state.receipt);
         }
     }
@@ -68,7 +66,7 @@ export default class RentReceiptForm extends React.Component {
 
     calculatePeriodesFromDateTransmission(receipt) {
         // Initialization if empty
-        if(!receipt.dateTransmission) {
+        if (!receipt.dateTransmission) {
             receipt.dateTransmission = new Date();
         }
         const dateTransmission = receipt.dateTransmission, y = dateTransmission.getFullYear(), m = dateTransmission.getMonth();
@@ -80,19 +78,6 @@ export default class RentReceiptForm extends React.Component {
         // Last day of month
         const periodeEnd = new Date(y, m + 1, 0);
         receipt.periodeEnd = periodeEnd;
-        return receipt;
-    }
-
-    calculateDueDateFromDateTransmission(receipt) {
-        // Initialization if empty
-        if(!receipt.dateTransmission) {
-            receipt.dateTransmission = new Date();
-        }
-        const dateTransmission = receipt.dateTransmission, y = dateTransmission.getFullYear(), m = dateTransmission.getMonth();
-
-        const dueDate = new Date(y, m + 1, 5);
-        receipt.dueDate = dueDate;
-
         return receipt;
     }
 
@@ -117,6 +102,11 @@ export default class RentReceiptForm extends React.Component {
                     <textarea className="form-control textarea-autosize" name="ownerAdress" id="RentReceiptFormOwnerAdress" value={this.state.receipt.ownerAdress} onChange={this.handleChange} />
                 </FormGroup>
 
+                <FormGroup >
+                    <label htmlFor="RentReceiptFormAdresse"> Adresse du bien : </label>
+                    <textarea className="form-control textarea-autosize" name="adress" id="RentReceiptFormAdresse" value={this.state.receipt.adress} onChange={this.handleChange} />
+                </FormGroup>
+
                 <FormGroup className="row">
                     <div className="col-sm-6">
                         <label htmlFor="RentReceiptFormTenantFirstName"> Prénom du locataire : </label>
@@ -129,8 +119,8 @@ export default class RentReceiptForm extends React.Component {
                 </FormGroup>
 
                 <FormGroup >
-                    <label htmlFor="RentReceiptFormAdresse"> Adresse du bien : </label>
-                    <textarea className="form-control textarea-autosize" name="adress" id="RentReceiptFormAdresse" value={this.state.receipt.adress} onChange={this.handleChange} />
+                    <label htmlFor="RentReceiptFormTenantAdresse"> Adresse du locataire : </label>
+                    <textarea className="form-control textarea-autosize" name="tenantAdress" id="RentReceiptFormTenantAdresse" value={this.state.receipt.tenantAdress} onChange={this.handleChange} />
                 </FormGroup>
 
                 <FormGroup >
@@ -161,8 +151,13 @@ export default class RentReceiptForm extends React.Component {
                 </FormGroup>
 
                 <FormGroup >
-                    <label htmlFor="RentReceiptFormDueDate"> Date d'exigibilité : </label>
-                    <FormControl type="date" name="dueDate" id="RentReceiptFormDueDate" value={convertDateToStringInput(this.state.receipt.dueDate)} onChange={this.handleChange} />
+                    <label htmlFor="RentReceiptFormAmountPaid"> Montant payé : </label>
+                    <FormControl type="number" name="amountPaid" id="RentReceiptFormAmountPaid" value={this.state.receipt.amountPaid} onChange={this.handleChange} />
+                </FormGroup>
+
+                <FormGroup >
+                    <label htmlFor="RentReceiptFormPaidDate"> Date de paiement : </label>
+                    <FormControl type="date" name="paidDate" id="RentReceiptFormPaidDate" value={convertDateToStringInput(this.state.receipt.paidDate)} onChange={this.handleChange} />
                 </FormGroup>
 
                 <FormGroup>

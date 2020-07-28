@@ -19,11 +19,14 @@ class Main extends Component {
             "Léa",
             "LIMOGES",
             "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance",
+            "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance",
             today,
             today,
             today,
             450,
-            0
+            0,
+            450,
+            today
         );
 
         this.state = {

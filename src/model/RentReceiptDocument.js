@@ -9,25 +9,29 @@ export function getDocumentDefinition(receipt) {
   const dateTransmission = convertDateToDisplayedString(receipt.dateTransmission);
   const periodeStart = convertDateToDisplayedString(receipt.periodeStart);
   const periodeEnd = convertDateToDisplayedString(receipt.periodeEnd);
-  const dueDate = convertDateToDisplayedString(receipt.dueDate);
+  const paidDate = convertDateToDisplayedString(receipt.paidDate);
   return {
     pageSize: 'A4',
     pageOrientation: 'portrait',
     styles: {
       table: {
         width: "auto"
+      },
+      payment: {        
+        alignment: 'center',
+        fontSize: 16,
       }
     },
     content: [
       '\n\n\n',
       {
-        text: 'Avis d\'échéance',
+        text: 'Quittance de loyer',
         fontSize: 30,
         alignment: 'center'
       },
       '\n\n\n',
       {
-        text: `Avis d\'échéance émis le ${dateTransmission}`,
+        text: `Quittance de loyer émis le ${dateTransmission}`,
         alignment: 'right'
       },
       '\n\n\n',
@@ -53,24 +57,31 @@ export function getDocumentDefinition(receipt) {
               decoration: 'underline',
             },
             {
-              text: `${receipt.tenantFirstName} ${receipt.tenantLastName}\n${receipt.adress}`,
+              text: `${receipt.tenantFirstName} ${receipt.tenantLastName}\n${receipt.tenantAdress}`,
               alignment: 'right',
             }
           ]
         ]
       },
+      '\n\n\n',
+      {
+        text: 'Adresse du bien',
+        alignment: 'center',
+        bold: true,
+        decoration: 'underline',
+      },
+      {
+        text: `${receipt.adress}`,
+        alignment: 'center',
+      },
       {
         width: 'auto',
         headerRows: 1,
-        widths: [ '100%', '100%' ],
-        margin: [ 70, 100 ],
+        widths: ['100%', '100%'],
+        margin: [70, 80],
         table: {
           dontBreakRows: true,
           body: [
-            [
-              { text: 'Adresse du bien' },
-              { text: 'Adresse logement' },
-            ],
             [
               { text: 'Loyer mensuel contractuel' },
               { text: `${receipt.rent} €` },
@@ -84,28 +95,32 @@ export function getDocumentDefinition(receipt) {
               { text: `Du ${periodeStart} au ${periodeEnd}` },
             ],
             [
-              { text: 'Somme due' },
+              { text: 'Loyer charge comprise' },
               { text: `${(receipt.rent + receipt.charges)} €` },
-            ],
-            [
-              { text: 'Date d\'exigibilité' },
-              { text: `Au plus tard le ${dueDate}` },
             ]
           ]
         }
       },
       {
-        text: 'Rappels importants',
-        alignment: 'left',
-        bold: true,
-        decoration: 'underline',
-      },
-      {
-        ul: [
-          'Cet avis d\'échéance ne vaut pas quittance',
+        text: [
+          {
+            text: `${receipt.amountPaid} € `,
+            style: "payment",
+            bold: true,
+          },
+          {
+            text: "payé par le locataire le ",
+            style: "payment"
+          },
+          {
+            text: `${paidDate}`,
+            style: "payment",
+            bold: true,
+          }
         ]
-      },
+      }
     ]
+
   };
 }
 
