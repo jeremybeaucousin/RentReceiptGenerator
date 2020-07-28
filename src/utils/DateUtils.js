@@ -26,3 +26,11 @@ export function convertDateToStringInputWithSeparator(date, separator) {
     }
     return stringInput;
 }
+
+export function getMonthString(date) {
+    let stringInput = "";
+    if (date && date instanceof Date) {
+        return date.toLocaleString('default', { month: 'long' });;
+    }
+    return stringInput;
+}

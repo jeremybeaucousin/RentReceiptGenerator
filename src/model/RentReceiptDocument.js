@@ -1,7 +1,7 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 
-import { convertDateToDisplayedString, convertDateToStringInputWithSeparator } from "../utils/DateUtils";
+import { convertDateToDisplayedString, convertDateToStringInputWithSeparator, getMonthString } from "../utils/DateUtils";
 
 export function getDocumentDefinition(receipt) {
   pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -25,7 +25,7 @@ export function getDocumentDefinition(receipt) {
     content: [
       '\n\n\n',
       {
-        text: 'Quittance de loyer',
+        text: `Quittance de loyer ${getMonthString(receipt.dateTransmission)} ${receipt.dateTransmission.getFullYear()}`,
         fontSize: 30,
         alignment: 'center'
       },
