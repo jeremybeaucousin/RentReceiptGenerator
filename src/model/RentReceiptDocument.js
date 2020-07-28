@@ -125,5 +125,5 @@ export function getDocumentDefinition(receipt) {
 }
 
 export function pdfMakeTable(receipt) {
-  return pdfMake.createPdf(getDocumentDefinition(receipt)).download(`avis_echeance_${convertDateToStringInputWithSeparator(receipt.dateTransmission, "_")}`);
+  return pdfMake.createPdf(getDocumentDefinition(receipt)).download(`quittance_loyer_${convertDateToStringInputWithSeparator(receipt.dateTransmission, "_")}`);
 }
