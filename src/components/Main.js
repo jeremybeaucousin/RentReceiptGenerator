@@ -23,9 +23,9 @@ class Main extends Component {
             today,
             today,
             today,
-            450,
+            530,
             0,
-            450,
+            530,
             today
         );
 
