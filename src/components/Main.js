@@ -12,36 +12,59 @@ class Main extends Component {
     constructor(props) {
         super(props);
         const today = new Date();
-        let receipt = new Receipt(
-            "Jonathan",
-            "BEAUCOUSIN",
-            "13 rue tadhomme\n76620 Le Havre\nFrance",
-            "Léa",
-            "LIMOGES",
-            "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance",
-            "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance",
-            today,
-            today,
-            today,
-            530,
-            0,
-            530,
-            today
-        );
+        let receipts = [
+            new Receipt(
+                "Jonathan",
+                "BEAUCOUSIN",
+                "13 rue tadhomme\n76620 Le Havre\nFrance",
+                "Léa",
+                "LIMOGES",
+                "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance",
+                "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance",
+                today,
+                today,
+                today,
+                530,
+                0,
+                530,
+                today
+            ),
+            new Receipt(
+                "L'enculé",
+                "QuiMeDonnePasLesInfos",
+                "Rue de la partouze",
+                "La Meuf",
+                "NOM à la CON",
+                "Nulle part",
+                "Nulle part ailleurs",
+                today,
+                today,
+                today,
+                1000000,
+                0,
+                1000000,
+                today
+            )
+        ]
+        
+        let currentReceipt = receipts[0];
 
         this.state = {
-            receipt: receipt,
+            currentReceipt: currentReceipt,
+            receipts: receipts
         }
     }
 
-    onReceiptChange = receipt => {
-        this.setState({ receipt: receipt });
+    onReceiptChange = currentReceipt => {
+        this.setState({ 
+            currentReceipt: currentReceipt
+         });
         this.reloadPdf();
-        
+
     }
 
     reloadPdf() {
-        const pdfDocGenerator = pdfMake.createPdf(getDocumentDefinition(this.state.receipt));
+        const pdfDocGenerator = pdfMake.createPdf(getDocumentDefinition(this.state.currentReceipt));
         pdfDocGenerator.getDataUrl((dataUrl) => {
             const targetElement = document.querySelector('#iframePdf');
             let iframe = targetElement.querySelector('iframe');
@@ -70,13 +93,13 @@ class Main extends Component {
                     </NavbarBrand>
                 </Navbar>
 
-            <div className="row">
-                <Jumbotron className="content col-sm-6">
-                    <RentReceiptForm receipt={this.state.receipt} onReceiptChange={this.onReceiptChange} />
-                </Jumbotron>
+                <div className="row">
+                    <Jumbotron className="content col-sm-6">
+                        <RentReceiptForm currentReceipt={this.state.currentReceipt} onReceiptChange={this.onReceiptChange} />
+                    </Jumbotron>
 
-                <div className="col-sm-6" width="100%" id="iframePdf" />
-            </div>
+                    <div className="col-sm-6" width="100%" id="iframePdf" />
+                </div>
             </Container>
         );
     }
