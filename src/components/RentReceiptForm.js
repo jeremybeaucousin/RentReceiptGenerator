@@ -12,37 +12,46 @@ export default class RentReceiptForm extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log(props);
         let currentReceipt = this.props.currentReceipt;
+        let receipts = this.props.receipts;
 
         currentReceipt = this.calculatePeriodesFromDateTransmission(currentReceipt);
         this.state = {
             currentReceipt: currentReceipt,
+            receipts: receipts,
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+
+    rentReiciptTenantPrefix = "RentReceiptTenant";
+
     handleChange(event) {
         let value = event.target.value;
         const receiptColumn = event.target.name;
         this.setState(prevState => {
             let currentReceipt = Object.assign({}, prevState.currentReceipt);
-            // Parse number from string
-            if (value && ["rent", "charges"].includes(receiptColumn)) {
-                value = parseFloat(value);
-            }
+            if (value.startsWith(this.rentReiciptTenantPrefix)) {
+                let index = value.replace(this.rentReiciptTenantPrefix, "")
+                currentReceipt = this.state.receipts[index];
+            } else {
+                // Parse number from string
+                if (value && ["rent", "charges"].includes(receiptColumn)) {
+                    value = parseFloat(value);
+                }
 
-            // Parse date from string
-            if (value && ["dateTransmission", "periodeStart", "periodeEnd", "paidDate"].includes(receiptColumn)) {
-                value = new Date(value);
-            }
+                // Parse date from string
+                if (value && ["dateTransmission", "periodeStart", "periodeEnd", "paidDate"].includes(receiptColumn)) {
+                    value = new Date(value);
+                }
 
-            currentReceipt[receiptColumn] = value;
-            // Refresh periode dates
-            if (receiptColumn === "dateTransmission") {
-                currentReceipt = this.calculatePeriodesFromDateTransmission(currentReceipt);
+                currentReceipt[receiptColumn] = value;
+                // Refresh periode dates
+                if (receiptColumn === "dateTransmission") {
+                    currentReceipt = this.calculatePeriodesFromDateTransmission(currentReceipt);
+                }
             }
 
             return { currentReceipt };
@@ -82,9 +91,26 @@ export default class RentReceiptForm extends React.Component {
         return currentReceipt;
     }
 
+    listReceipts() {
+        return this.state.receipts.map((receipt, index) =>
+            <option key={`${this.rentReiciptTenantPrefix}${index}`} value={`${this.rentReiciptTenantPrefix}${index}`}>
+                {receipt.tenantLastName} {receipt.tenantFirstName}
+            </option>
+        );
+    }
+
     render() {
+
         return (
             <form onSubmit={this.handleSubmit}>
+                <FormGroup className="row">
+                    <div className="col-sm-6">
+                        <label htmlFor="RentReceiptTenants"> Choix du locataire : </label>
+                        <FormControl id="RentReceiptTenants" as="select" onChange={this.handleChange} custom>
+                            {this.listReceipts()}
+                        </FormControl>
+                    </div>
+                </FormGroup>
                 <FormGroup className="row">
                     <div className="col-sm-6">
                         <label htmlFor="RentReceiptFormOwnerFirstName"> Prénom du propriétaire : </label>
@@ -95,7 +121,6 @@ export default class RentReceiptForm extends React.Component {
                         <label htmlFor="RentReceiptFormOwnerLastName"> Nom du propriétaire : </label>
                         <FormControl type="text" name="ownerLastName" id="RentReceiptFormOwnerLastName" value={this.state.currentReceipt.ownerLastName} onChange={this.handleChange} />
                     </div>
-
                 </FormGroup>
 
                 <FormGroup >

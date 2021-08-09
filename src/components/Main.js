@@ -95,7 +95,7 @@ class Main extends Component {
 
                 <div className="row">
                     <Jumbotron className="content col-sm-6">
-                        <RentReceiptForm currentReceipt={this.state.currentReceipt} onReceiptChange={this.onReceiptChange} />
+                        <RentReceiptForm currentReceipt={this.state.currentReceipt} receipts={this.state.receipts} onReceiptChange={this.onReceiptChange} />
                     </Jumbotron>
 
                     <div className="col-sm-6" width="100%" id="iframePdf" />
