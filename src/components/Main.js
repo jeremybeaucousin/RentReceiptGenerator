@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import pdfMake from "pdfmake/build/pdfmake";
 
-import { Container, Row, Col, Navbar, NavbarBrand, Jumbotron } from 'react-bootstrap';
+import { Container, Row, Col, Navbar, NavbarBrand, Jumbotron, Alert } from 'react-bootstrap';
 
 import RentReceiptForm from "./RentReceiptForm";
 import Receipt from "../model/Receipt";
@@ -96,12 +96,13 @@ class Main extends Component {
         this.reloadPdf();
         return (
             <Container>
-                <Navbar className="row navbar-light bg-light">
-                    <NavbarBrand href="#">
-                        <h3>Générateur de quittance de loyer</h3>
-                    </NavbarBrand>
-                </Navbar>
-
+                <header>
+                    <Navbar className="row navbar-light bg-light">
+                        <NavbarBrand href="#">
+                            <h3>Générateur de quittance de loyer</h3>
+                        </NavbarBrand>
+                    </Navbar>
+                </header>
                 <Row>
                     <Jumbotron className="content col-sm-6">
                         <RentReceiptForm currentReceipt={this.state.currentReceipt} receipts={this.state.receipts} onReceiptChange={this.onReceiptChange} />
@@ -110,14 +111,12 @@ class Main extends Component {
                     <Col width="100%" sm="6" id="iframePdf" />
                 </Row>
                 <footer>
-                    <Container>
-                        <Row>
-                            <Col sm="8">jeremy.beaucousin@gmal.com</Col>
-                            <Col align="right">{process.env.REACT_APP_NAME} <b>V{process.env.REACT_APP_VERSION}</b></Col>
-                        </Row>
-                    </Container>
+                    <Row className="bg-light">
+                        <Col>jeremy.beaucousin@gmal.com</Col>
+                        <Col align="right">{process.env.REACT_APP_NAME} <b>V{process.env.REACT_APP_VERSION}</b></Col>
+                    </Row>
                 </footer>
-            </Container>
+            </Container >
         );
     }
 }
