@@ -45,7 +45,7 @@ export function getDocumentDefinition(receipt) {
               decoration: 'underline',
             },
             {
-              text: `${receipt.ownerFirstName} ${receipt.ownerLastName}\n${receipt.ownerAdress}`,
+              text: `${receipt.owner.firstName} ${receipt.owner.lastName}\n${receipt.owner.adress}`,
               alignment: 'left',
             }
           ],
@@ -57,7 +57,7 @@ export function getDocumentDefinition(receipt) {
               decoration: 'underline',
             },
             {
-              text: `${receipt.tenantFirstName} ${receipt.tenantLastName}\n${receipt.tenantAdress}`,
+              text: `${receipt.tenant.firstName} ${receipt.tenant.lastName}\n${receipt.tenant.adress}`,
               alignment: 'right',
             }
           ]

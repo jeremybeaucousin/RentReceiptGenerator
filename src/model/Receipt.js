@@ -1,11 +1,7 @@
 export default class Receipt {
   constructor(
-    ownerFirstName,
-    ownerLastName,
-    ownerAdress,
-    tenantFirstName,
-    tenantLastName,
-    tenantAdress,
+    owner,
+    tenant,
     adress,
     dateTransmission,
     periodeStart,
@@ -15,12 +11,8 @@ export default class Receipt {
     amountPaid,
     paidDate,
   ) {
-    this.ownerFirstName = ownerFirstName;
-    this.ownerLastName = ownerLastName;
-    this.ownerAdress = ownerAdress;
-    this.tenantFirstName = tenantFirstName;
-    this.tenantLastName = tenantLastName;
-    this.tenantAdress = tenantAdress;
+    this.owner = owner;
+    this.tenant = tenant;
     this.adress = adress;
     this.dateTransmission = dateTransmission;
     this.periodeStart = periodeStart;
