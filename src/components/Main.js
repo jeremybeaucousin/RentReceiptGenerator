@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import pdfMake from "pdfmake/build/pdfmake";
 
-import { Container, Row, Col, Navbar, NavbarBrand, Jumbotron, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Navbar, NavbarBrand, Jumbotron } from 'react-bootstrap';
+
+import receipts from '../data/Receipts.json';
 
 import RentReceiptForm from "./RentReceiptForm";
-import Receipt from "../model/Receipt";
-import Owner from "../model/owner";
-import Tenant from "../model/tenant";
 import { getDocumentDefinition } from '../model/RentReceiptDocument';
 
 class Main extends Component {
@@ -14,52 +13,15 @@ class Main extends Component {
         super(props);
         const today = new Date();
 
-        let owner = new Owner(
-            "Jonathan",
-            "BEAUCOUSIN",
-            "13 rue tadhomme\n76620 Le Havre\nFrance"
-        );
-        let tenant1 = new Tenant(
-            "Léa",
-            "LIMOGES",
-            "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance"
-        );
-        let tenant2 = new Tenant(
-            "La Meuf",
-            "NOM à la CON",
-            "Nulle part"
-        );
-        let receipts = [
-            new Receipt(
-                owner,
-                tenant1,
-                "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance",
-                today,
-                today,
-                today,
-                530,
-                0,
-                530,
-                today
-            ),
-            new Receipt(
-                owner,
-                tenant2,
-                "Nulle part ailleurs",
-                today,
-                today,
-                today,
-                1000000,
-                0,
-                1000000,
-                today
-            )
-        ]
-
-        let currentReceipt = receipts[0];
+        receipts.forEach(receipt => {
+            receipt.dateTransmission = today;
+            receipt.periodeStart = today;
+            receipt.periodeEnd = today;
+            receipt.paidDate = today;
+        })
 
         this.state = {
-            currentReceipt: currentReceipt,
+            currentReceipt: receipts[0],
             receipts: receipts
         }
     }
@@ -69,7 +31,6 @@ class Main extends Component {
             currentReceipt: currentReceipt
         });
         this.reloadPdf();
-
     }
 
     reloadPdf() {

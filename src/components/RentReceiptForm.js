@@ -9,6 +9,8 @@ import { pdfMakeTable } from '../model/RentReceiptDocument';
 import { convertDateToStringInput } from "../utils/DateUtils";
 
 import { TenantList } from "./TenantList";
+import { OwnerForm } from "./OwnerForm";
+import { TenantForm } from "./TenantForm";
 
 export default class RentReceiptForm extends React.Component {
 
@@ -26,7 +28,6 @@ export default class RentReceiptForm extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-
 
     rentReiciptTenantPrefix = "RentReceiptTenant";
 
@@ -48,21 +49,17 @@ export default class RentReceiptForm extends React.Component {
                 if (value && ["dateTransmission", "periodeStart", "periodeEnd", "paidDate"].includes(receiptColumn)) {
                     value = new Date(value);
                 }
-                
-                if(receiptColumn.startsWith("owner")) {
+
+                if (receiptColumn.startsWith("owner")) {
                     const ownerColumn = receiptColumn.replace("owner.", "")
-                    console.log(ownerColumn);
-                    console.log(currentReceipt.owner[ownerColumn]);
                     currentReceipt.owner[ownerColumn] = value;
-                } else if(receiptColumn.startsWith("tenant")) {
+                } else if (receiptColumn.startsWith("tenant")) {
                     const tenantColumn = receiptColumn.replace("tenant.", "")
-                    console.log(tenantColumn);
-                    console.log(currentReceipt.tenant[tenantColumn]);
                     currentReceipt.tenant[tenantColumn] = value;
                 } else {
                     currentReceipt[receiptColumn] = value;
                 }
-                
+
                 // Refresh periode dates
                 if (receiptColumn === "dateTransmission") {
                     currentReceipt = this.calculatePeriodesFromDateTransmission(currentReceipt);
@@ -79,7 +76,6 @@ export default class RentReceiptForm extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        // First condition is for initiatlisation
         if ((this.props.currentReceipt !== this.state.currentReceipt) || (prevState.currentReceipt !== this.state.currentReceipt)) {
             this.props.onReceiptChange(this.state.currentReceipt);
         }
@@ -106,55 +102,17 @@ export default class RentReceiptForm extends React.Component {
         return currentReceipt;
     }
 
-    listReceipts() {
-        return this.state.receipts.map((receipt, index) =>
-            <option key={`${this.rentReiciptTenantPrefix}${index}`} value={`${this.rentReiciptTenantPrefix}${index}`}>
-                {receipt.tenant.lastName} {receipt.tenant.firstName}
-            </option>
-        );
-    }
-
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                <TenantList onSelectTenant={this.handleChange} />
-                <FormGroup className="row">
-                    <div className="col-sm-6">
-                        <label htmlFor="RentReceiptFormOwnerFirstName"> Prénom du propriétaire : </label>
-                        <FormControl type="text" name="owner.firstName" id="RentReceiptFormOwnerFirstName" value={this.state.currentReceipt.owner.firstName} onChange={this.handleChange} />
-                    </div>
-
-                    <div className="col-sm-6">
-                        <label htmlFor="RentReceiptFormOwnerLastName"> Nom du propriétaire : </label>
-                        <FormControl type="text" name="owner.lastName" id="RentReceiptFormOwnerLastName" value={this.state.currentReceipt.owner.lastName} onChange={this.handleChange} />
-                    </div>
-                </FormGroup>
-
-                <FormGroup >
-                    <label htmlFor="RentReceiptFormOwnerAdress"> Adresse du propriétaire : </label>
-                    <textarea className="form-control textarea-autosize" name="owner.adress" id="RentReceiptFormOwnerAdress" value={this.state.currentReceipt.owner.adress} onChange={this.handleChange} />
-                </FormGroup>
-
+                <TenantList rentReiciptTenantPrefix={this.rentReiciptTenantPrefix} onSelectTenant={this.handleChange} />
+                <OwnerForm owner={this.state.currentReceipt.owner} handleChange={this.handleChange} />
                 <FormGroup >
                     <label htmlFor="RentReceiptFormAdresse"> Adresse du bien : </label>
                     <textarea className="form-control textarea-autosize" name="adress" id="RentReceiptFormAdresse" value={this.state.currentReceipt.adress} onChange={this.handleChange} />
                 </FormGroup>
 
-                <FormGroup className="row">
-                    <div className="col-sm-6">
-                        <label htmlFor="RentReceiptFormTenantFirstName"> Prénom du locataire : </label>
-                        <FormControl type="text" name="tenant.firstName" id="RentReceiptFormTenantFirstName" value={this.state.currentReceipt.tenant.firstName} onChange={this.handleChange} />
-                    </div>
-                    <div className="col-sm-6">
-                        <label htmlFor="RentReceiptFormTenantLastName"> Nom du locataire : </label>
-                        <FormControl type="text" name="tenant.lastName" id="RentReceiptFormTenantLastName" value={this.state.currentReceipt.tenant.lastName} onChange={this.handleChange} />
-                    </div>
-                </FormGroup>
-
-                <FormGroup >
-                    <label htmlFor="RentReceiptFormTenantAdresse"> Adresse du locataire : </label>
-                    <textarea className="form-control textarea-autosize" name="tenant.adress" id="RentReceiptFormTenantAdresse" value={this.state.currentReceipt.tenant.adress} onChange={this.handleChange} />
-                </FormGroup>
+                <TenantForm tenant={this.state.currentReceipt.tenant} handleChange={this.handleChange} />
 
                 <FormGroup >
                     <label htmlFor="RentReceiptFormDateTransmission"> Date d'émission de la quittance : </label>

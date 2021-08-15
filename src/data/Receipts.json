@@ -1,0 +1,34 @@
+[
+    {
+        "owner" : {
+            "firstName" : "Jonathan",
+            "lastName" : "BEAUCOUSIN",
+            "adress" : "13 rue tadhomme\n76620 Le Havre\nFrance"
+        },
+        "tenant" : {
+            "firstName" : "Léa",
+            "lastName" : "LIMOGES",
+            "adress" : "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance"
+        },
+        "adress" : "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance",
+        "rent" : 530,
+        "charges" : 0,
+        "amountPaid" : 530
+    },
+    {
+        "owner" : {
+            "firstName" : "Jonathan",
+            "lastName" : "BEAUCOUSIN",
+            "adress" : "13 rue tadhomme\n76620 Le Havre\nFrance"
+        },
+        "tenant" : {
+            "firstName" : "La Meuf",
+            "lastName" : "NOM à la CON",
+            "adress" : "Nulle part"
+        },
+        "adress" : "Nulle part ailleurs",
+        "rent" : 1000000,
+        "charges" : 0,
+        "amountPaid" : 1000000
+    }
+]
