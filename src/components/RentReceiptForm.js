@@ -8,6 +8,8 @@ import { pdfMakeTable } from '../model/RentReceiptDocument';
 
 import { convertDateToStringInput } from "../utils/DateUtils";
 
+import { TenantList } from "./TenantList";
+
 export default class RentReceiptForm extends React.Component {
 
     constructor(props) {
@@ -113,17 +115,9 @@ export default class RentReceiptForm extends React.Component {
     }
 
     render() {
-
         return (
             <form onSubmit={this.handleSubmit}>
-                <FormGroup className="row">
-                    <div className="col-sm-6">
-                        <label htmlFor="RentReceiptTenants"> Choix du locataire : </label>
-                        <FormControl id="RentReceiptTenants" as="select" onChange={this.handleChange} custom>
-                            {this.listReceipts()}
-                        </FormControl>
-                    </div>
-                </FormGroup>
+                <TenantList onSelectTenant={this.handleChange} />
                 <FormGroup className="row">
                     <div className="col-sm-6">
                         <label htmlFor="RentReceiptFormOwnerFirstName"> Prénom du propriétaire : </label>
