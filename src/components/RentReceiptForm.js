@@ -39,6 +39,7 @@ export default class RentReceiptForm extends React.Component {
             if (value.startsWith(this.rentReiciptTenantPrefix)) {
                 const index = value.replace(this.rentReiciptTenantPrefix, "")
                 currentReceipt = this.state.receipts[index];
+                currentReceipt = this.calculatePeriodesFromDateTransmission(currentReceipt);
             } else {
                 // Parse number from string
                 if (value && ["rent", "charges"].includes(receiptColumn)) {
