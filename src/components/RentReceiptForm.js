@@ -31,6 +31,16 @@ export default class RentReceiptForm extends React.Component {
 
     rentReiciptTenantPrefix = "RentReceiptTenant";
 
+    handleTenantChange = event => {
+        let value = event.target.value;
+        const column = event.target.name;
+        this.setState(prevState => {
+            let currentReceipt = Object.assign({}, prevState.currentReceipt);
+            currentReceipt.tenant[column] = value;
+            return { currentReceipt };
+        });
+    }
+
     handleChange(event) {
         let value = event.target.value;
         const receiptColumn = event.target.name;
@@ -54,9 +64,6 @@ export default class RentReceiptForm extends React.Component {
                 if (receiptColumn.startsWith("owner")) {
                     const ownerColumn = receiptColumn.replace("owner.", "")
                     currentReceipt.owner[ownerColumn] = value;
-                } else if (receiptColumn.startsWith("tenant")) {
-                    const tenantColumn = receiptColumn.replace("tenant.", "")
-                    currentReceipt.tenant[tenantColumn] = value;
                 } else {
                     currentReceipt[receiptColumn] = value;
                 }
@@ -113,7 +120,7 @@ export default class RentReceiptForm extends React.Component {
                     <textarea className="form-control textarea-autosize" name="adress" id="RentReceiptFormAdresse" value={this.state.currentReceipt.adress} onChange={this.handleChange} />
                 </FormGroup>
 
-                <TenantForm tenant={this.state.currentReceipt.tenant} handleChange={this.handleChange} />
+                <TenantForm tenant={this.state.currentReceipt.tenant} handleTenantChange={this.handleTenantChange} />
 
                 <FormGroup >
                     <label htmlFor="RentReceiptFormDateTransmission"> Date d'émission de la quittance : </label>
