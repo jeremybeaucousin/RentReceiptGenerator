@@ -31,6 +31,17 @@ export default class RentReceiptForm extends React.Component {
 
     rentReiciptTenantPrefix = "RentReceiptTenant";
 
+    handleOwnerChange = event => {
+        let value = event.target.value;
+        const column = event.target.name;
+        console.log(value, column);
+        this.setState(prevState => {
+            let currentReceipt = Object.assign({}, prevState.currentReceipt);
+            currentReceipt.owner[column] = value;
+            return { currentReceipt };
+        });
+    }
+
     handleTenantChange = event => {
         let value = event.target.value;
         const column = event.target.name;
@@ -61,12 +72,7 @@ export default class RentReceiptForm extends React.Component {
                     value = new Date(value);
                 }
 
-                if (receiptColumn.startsWith("owner")) {
-                    const ownerColumn = receiptColumn.replace("owner.", "")
-                    currentReceipt.owner[ownerColumn] = value;
-                } else {
-                    currentReceipt[receiptColumn] = value;
-                }
+                currentReceipt[receiptColumn] = value;
 
                 // Refresh periode dates
                 if (receiptColumn === "dateTransmission") {
@@ -114,7 +120,7 @@ export default class RentReceiptForm extends React.Component {
         return (
             <form onSubmit={this.handleSubmit}>
                 <TenantList rentReiciptTenantPrefix={this.rentReiciptTenantPrefix} onSelectTenant={this.handleChange} />
-                <OwnerForm owner={this.state.currentReceipt.owner} handleChange={this.handleChange} />
+                <OwnerForm owner={this.state.currentReceipt.owner} handleOwnerChange={this.handleOwnerChange} />
                 <FormGroup >
                     <label htmlFor="RentReceiptFormAdresse"> Adresse du bien : </label>
                     <textarea className="form-control textarea-autosize" name="adress" id="RentReceiptFormAdresse" value={this.state.currentReceipt.adress} onChange={this.handleChange} />
