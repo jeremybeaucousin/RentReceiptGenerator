@@ -2,7 +2,7 @@ import React from 'react';
 
 import { FormGroup, FormControl } from 'react-bootstrap';
 
-import Tenants from '../data/Tenants.json';
+import Tenants from '../../data/Tenants.json';
 
 export class TenantList extends React.Component {
     constructor(props) {

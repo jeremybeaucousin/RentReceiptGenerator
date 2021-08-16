@@ -5,7 +5,7 @@ import { Container, Row, Col, Navbar, NavbarBrand, Jumbotron } from 'react-boots
 
 import receipts from '../data/Receipts.json';
 
-import RentReceiptForm from "./RentReceiptForm";
+import RentReceiptForm from "./RentReceiptForm/RentReceiptForm";
 import { getDocumentDefinition } from '../model/RentReceiptDocument';
 
 class Main extends Component {
