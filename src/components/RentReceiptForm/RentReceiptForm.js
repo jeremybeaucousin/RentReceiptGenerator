@@ -6,8 +6,6 @@ import './RentReceiptForm.css';
 
 import { pdfMakeTable } from '../../model/RentReceiptDocument';
 
-import { convertDateToStringInput } from "../../utils/DateUtils";
-
 import { TenantList } from "./TenantList";
 import { OwnerForm } from "./OwnerForm";
 import { TenantForm } from "./TenantForm";
@@ -78,11 +76,6 @@ export default class RentReceiptForm extends React.Component {
                 value = parseFloat(value);
             }
 
-            // Parse date from string
-            if (value && ["paidDate"].includes(receiptColumn)) {
-                value = new Date(value);
-            }
-
             currentReceipt[receiptColumn] = value;
             return { currentReceipt };
         });
@@ -129,11 +122,6 @@ export default class RentReceiptForm extends React.Component {
                 <FormGroup >
                     <label htmlFor="RentReceiptFormAmountPaid"> Montant payé : </label>
                     <FormControl type="number" name="amountPaid" id="RentReceiptFormAmountPaid" value={this.state.currentReceipt.amountPaid} onChange={this.handleChange} />
-                </FormGroup>
-
-                <FormGroup >
-                    <label htmlFor="RentReceiptFormPaidDate"> Date de paiement : </label>
-                    <FormControl type="date" name="paidDate" id="RentReceiptFormPaidDate" value={convertDateToStringInput(this.state.currentReceipt.paidDate)} onChange={this.handleChange} />
                 </FormGroup>
 
                 <FormGroup>

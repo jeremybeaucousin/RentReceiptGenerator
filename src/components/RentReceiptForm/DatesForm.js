@@ -59,13 +59,18 @@ export class DatesForm extends React.Component {
                 <FormGroup className="row">
                     <div className="col-sm-6">
                         <label htmlFor="RentReceiptFormPeriodeStart"> Début de la période concernée : </label>
-                        <FormControl type="date" name="periodeStart" id="RentReceiptFormPeriodeStart" value={convertDateToStringInput(this.state.currentReceipt.periodeStart)} onChange={this.handleDatesChange} />
+                        <FormControl type="date" name="periodeStart" id="RentReceiptFormPeriodeStart" value={convertDateToStringInput(this.state.currentReceipt.periodeStart)} onChange={this.handleChangeAndCalculation} />
                     </div>
                     <div className="col-sm-6">
                         <label htmlFor="RentReceiptFormPeriodeEnd"> Fin de la période concernée : </label>
-                        <FormControl type="date" name="periodeEnd" id="RentReceiptFormPeriodeEnd" value={convertDateToStringInput(this.state.currentReceipt.periodeEnd)} onChange={this.handleDatesChange} />
+                        <FormControl type="date" name="periodeEnd" id="RentReceiptFormPeriodeEnd" value={convertDateToStringInput(this.state.currentReceipt.periodeEnd)} onChange={this.handleChangeAndCalculation} />
                     </div>
 
+                </FormGroup>
+
+                <FormGroup >
+                    <label htmlFor="RentReceiptFormPaidDate"> Date de paiement : </label>
+                    <FormControl type="date" name="paidDate" id="RentReceiptFormPaidDate" value={convertDateToStringInput(this.state.currentReceipt.paidDate)} onChange={this.handleChangeAndCalculation} />
                 </FormGroup>
             </div>
         );
