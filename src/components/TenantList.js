@@ -7,7 +7,6 @@ import Tenants from '../data/Tenants.json';
 export class TenantList extends React.Component {
     constructor(props) {
         super(props);
-        this.rentReiciptTenantPrefix = props.rentReiciptTenantPrefix;
         this.onSelectTenant = props.onSelectTenant;
         this.state = {
             tenants: []
@@ -39,7 +38,7 @@ export class TenantList extends React.Component {
 
     listReceipts() {
         return this.state.tenants.map((tenant, index) =>
-            <option key={`${this.rentReiciptTenantPrefix}${index}`} value={`${this.rentReiciptTenantPrefix}${index}`}>
+            <option key={index} value={index}>
                 {tenant.lastName} {tenant.firstName}
             </option>
         );

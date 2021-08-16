@@ -29,12 +29,21 @@ export default class RentReceiptForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    rentReiciptTenantPrefix = "RentReceiptTenant";
+    handleTenantSelection = event => {
+        let value = event.target.value;
+        console.log(value);
+        this.setState(prevState => {
+            let currentReceipt = Object.assign({}, prevState.currentReceipt);
+            currentReceipt = this.state.receipts[value];
+            currentReceipt = this.calculatePeriodesFromDateTransmission(currentReceipt);
+            console.log(currentReceipt);
+            return { currentReceipt };
+        });
+    }
 
     handleOwnerChange = event => {
         let value = event.target.value;
         const column = event.target.name;
-        console.log(value, column);
         this.setState(prevState => {
             let currentReceipt = Object.assign({}, prevState.currentReceipt);
             currentReceipt.owner[column] = value;
@@ -57,27 +66,21 @@ export default class RentReceiptForm extends React.Component {
         const receiptColumn = event.target.name;
         this.setState(prevState => {
             let currentReceipt = Object.assign({}, prevState.currentReceipt);
-            if (value.startsWith(this.rentReiciptTenantPrefix)) {
-                const index = value.replace(this.rentReiciptTenantPrefix, "")
-                currentReceipt = this.state.receipts[index];
+            // Parse number from string
+            if (value && ["rent", "charges"].includes(receiptColumn)) {
+                value = parseFloat(value);
+            }
+
+            // Parse date from string
+            if (value && ["dateTransmission", "periodeStart", "periodeEnd", "paidDate"].includes(receiptColumn)) {
+                value = new Date(value);
+            }
+
+            currentReceipt[receiptColumn] = value;
+
+            // Refresh periode dates
+            if (receiptColumn === "dateTransmission") {
                 currentReceipt = this.calculatePeriodesFromDateTransmission(currentReceipt);
-            } else {
-                // Parse number from string
-                if (value && ["rent", "charges"].includes(receiptColumn)) {
-                    value = parseFloat(value);
-                }
-
-                // Parse date from string
-                if (value && ["dateTransmission", "periodeStart", "periodeEnd", "paidDate"].includes(receiptColumn)) {
-                    value = new Date(value);
-                }
-
-                currentReceipt[receiptColumn] = value;
-
-                // Refresh periode dates
-                if (receiptColumn === "dateTransmission") {
-                    currentReceipt = this.calculatePeriodesFromDateTransmission(currentReceipt);
-                }
             }
 
             return { currentReceipt };
@@ -119,7 +122,7 @@ export default class RentReceiptForm extends React.Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                <TenantList rentReiciptTenantPrefix={this.rentReiciptTenantPrefix} onSelectTenant={this.handleChange} />
+                <TenantList onSelectTenant={this.handleTenantSelection} />
                 <OwnerForm owner={this.state.currentReceipt.owner} handleOwnerChange={this.handleOwnerChange} />
                 <FormGroup >
                     <label htmlFor="RentReceiptFormAdresse"> Adresse du bien : </label>

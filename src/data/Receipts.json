@@ -17,9 +17,9 @@
     },
     {
         "owner" : {
-            "firstName" : "Jonathan",
-            "lastName" : "BEAUCOUSIN",
-            "adress" : "13 rue tadhomme\n76620 Le Havre\nFrance"
+            "firstName" : "Jérémy",
+            "lastName" : "BEAUCOUSIN-Rodriguez",
+            "adress" : "66 Route de Rennes\n44000 Nantes\nFrance"
         },
         "tenant" : {
             "firstName" : "La Meuf",
