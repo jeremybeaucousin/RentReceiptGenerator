@@ -1,11 +1,14 @@
 import React from 'react';
 
-import { FormGroup, FormControl } from 'react-bootstrap';
+import { FormGroup, FormControl, Row, Col, Jumbotron } from 'react-bootstrap';
 
 import './RentReceiptForm.css';
 
 import { pdfMakeTable } from '../../model/RentReceiptDocument';
+import { getDocumentDefinition } from '../../model/RentReceiptDocument';
+import pdfMake from "pdfmake/build/pdfmake";
 
+import receipts from '../../data/Receipts.json';
 import { TenantList } from "./TenantList";
 import { OwnerForm } from "./OwnerForm";
 import { TenantForm } from "./TenantForm";
@@ -15,16 +18,50 @@ export default class RentReceiptForm extends React.Component {
 
     constructor(props) {
         super(props);
-        let currentReceipt = this.props.currentReceipt;
-        let receipts = this.props.receipts;
+
+        const today = new Date();
+
+        receipts.forEach(receipt => {
+            receipt.dateTransmission = today;
+            receipt.periodeStart = today;
+            receipt.periodeEnd = today;
+            receipt.paidDate = today;
+        })
 
         this.state = {
-            currentReceipt: currentReceipt,
-            receipts: receipts,
-        };
+            currentReceipt: receipts[0],
+            receipts: receipts
+        }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    onReceiptChange = currentReceipt => {
+        this.setState({
+            currentReceipt: currentReceipt
+        });
+        this.reloadPdf();
+    }
+
+    reloadPdf() {
+        const pdfDocGenerator = pdfMake.createPdf(getDocumentDefinition(this.state.currentReceipt));
+        pdfDocGenerator.getDataUrl((dataUrl) => {
+            const targetElement = document.querySelector('#iframePdf');
+            let iframe = targetElement.querySelector('iframe');
+            let newIframe = false;
+            if (!iframe) {
+                newIframe = true;
+                iframe = document.createElement('iframe');
+                iframe.width = "100%";
+                iframe.height = "1100px";
+            }
+            iframe.src = dataUrl;
+            if (newIframe) {
+                targetElement.appendChild(iframe);
+            }
+        }
+        );
     }
 
     handleTenantSelection = event => {
@@ -85,49 +122,49 @@ export default class RentReceiptForm extends React.Component {
         event.preventDefault();
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if ((this.props.currentReceipt !== this.state.currentReceipt) || (prevState.currentReceipt !== this.state.currentReceipt)) {
-            this.props.onReceiptChange(this.state.currentReceipt);
-        }
-    }
-
     _exportPdfTable = () => {
         pdfMakeTable(this.state.currentReceipt);
     }
 
     render() {
+        this.reloadPdf();
         return (
-            <form onSubmit={this.handleSubmit}>
-                <TenantList onSelectTenant={this.handleTenantSelection} />
-                <OwnerForm owner={this.state.currentReceipt.owner} handleOwnerChange={this.handleOwnerChange} />
-                <FormGroup >
-                    <label htmlFor="RentReceiptFormAdresse"> Adresse du bien : </label>
-                    <textarea className="form-control textarea-autosize" name="adress" id="RentReceiptFormAdresse" value={this.state.currentReceipt.adress} onChange={this.handleChange} />
-                </FormGroup>
+            <Row>
+                <Jumbotron className="content col-sm-6">
+                    <form onSubmit={this.handleSubmit}>
+                        <TenantList onSelectTenant={this.handleTenantSelection} />
+                        <OwnerForm owner={this.state.currentReceipt.owner} handleOwnerChange={this.handleOwnerChange} />
+                        <FormGroup >
+                            <label htmlFor="RentReceiptFormAdresse"> Adresse du bien : </label>
+                            <textarea className="form-control textarea-autosize" name="adress" id="RentReceiptFormAdresse" value={this.state.currentReceipt.adress} onChange={this.handleChange} />
+                        </FormGroup>
 
-                <TenantForm tenant={this.state.currentReceipt.tenant} handleTenantChange={this.handleTenantChange} />
+                        <TenantForm tenant={this.state.currentReceipt.tenant} handleTenantChange={this.handleTenantChange} />
 
-                <DatesForm currentReceipt={this.state.currentReceipt} handleDatesChange={this.handleDatesChange}/>
+                        <DatesForm currentReceipt={this.state.currentReceipt} handleDatesChange={this.handleDatesChange} />
 
-                <FormGroup >
-                    <label htmlFor="RentReceiptFormRent"> Loyer mensuel contractuel : </label>
-                    <FormControl type="number" name="rent" id="RentReceiptFormRent" value={this.state.currentReceipt.rent} onChange={this.handleChange} />
-                </FormGroup>
+                        <FormGroup >
+                            <label htmlFor="RentReceiptFormRent"> Loyer mensuel contractuel : </label>
+                            <FormControl type="number" name="rent" id="RentReceiptFormRent" value={this.state.currentReceipt.rent} onChange={this.handleChange} />
+                        </FormGroup>
 
-                <FormGroup >
-                    <label htmlFor="RentReceiptFormCharges"> Charges mensuelles contractuelles : </label>
-                    <FormControl type="number" name="charges" id="RentReceiptFormCharges" value={this.state.currentReceipt.charges} onChange={this.handleChange} />
-                </FormGroup>
+                        <FormGroup >
+                            <label htmlFor="RentReceiptFormCharges"> Charges mensuelles contractuelles : </label>
+                            <FormControl type="number" name="charges" id="RentReceiptFormCharges" value={this.state.currentReceipt.charges} onChange={this.handleChange} />
+                        </FormGroup>
 
-                <FormGroup >
-                    <label htmlFor="RentReceiptFormAmountPaid"> Montant payé : </label>
-                    <FormControl type="number" name="amountPaid" id="RentReceiptFormAmountPaid" value={this.state.currentReceipt.amountPaid} onChange={this.handleChange} />
-                </FormGroup>
+                        <FormGroup >
+                            <label htmlFor="RentReceiptFormAmountPaid"> Montant payé : </label>
+                            <FormControl type="number" name="amountPaid" id="RentReceiptFormAmountPaid" value={this.state.currentReceipt.amountPaid} onChange={this.handleChange} />
+                        </FormGroup>
 
-                <FormGroup>
-                    <button className="col-sm-12 btn btn-primary" onClick={this._exportPdfTable}>Télécharger !</button>
-                </FormGroup>
-            </form>
+                        <FormGroup>
+                            <button className="col-sm-12 btn btn-primary" onClick={this._exportPdfTable}>Télécharger !</button>
+                        </FormGroup>
+                    </form>
+                </Jumbotron>
+                <Col width="100%" sm="6" id="iframePdf" />
+            </Row>
         );
     }
 }
