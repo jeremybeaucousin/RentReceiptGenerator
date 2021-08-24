@@ -45,16 +45,6 @@ export default class RentReceiptForm extends React.Component {
         });
     }
 
-    handleTenantChange = event => {
-        let value = event.target.value;
-        const column = event.target.name;
-        this.setState(prevState => {
-            let currentReceipt = Object.assign({}, prevState.currentReceipt);
-            currentReceipt.tenant[column] = value;
-            return { currentReceipt };
-        });
-    }
-
     handleChanges = newCurrentReceipt => {
         this.setState(prevState => {
             let currentReceipt = Object.assign({}, prevState.currentReceipt);
@@ -68,11 +58,9 @@ export default class RentReceiptForm extends React.Component {
         const receiptColumn = event.target.name;
         this.setState(prevState => {
             let currentReceipt = Object.assign({}, prevState.currentReceipt);
-            // Parse number from string
-            if (value && ["rent", "charges"].includes(receiptColumn)) {
+            if (value && ["rent", "charges", "amountPaid"].includes(receiptColumn)) {
                 value = parseFloat(value);
             }
-
             currentReceipt[receiptColumn] = value;
             return { currentReceipt };
         });
@@ -98,7 +86,7 @@ export default class RentReceiptForm extends React.Component {
                             <textarea className="form-control textarea-autosize" name="adress" id="RentReceiptFormAdresse" value={this.state.currentReceipt.adress} onChange={this.handleChange} />
                         </FormGroup>
 
-                        <TenantForm tenant={this.state.currentReceipt.tenant} handleTenantChange={this.handleTenantChange} />
+                        <TenantForm currentReceipt={this.state.currentReceipt} handleChanges={this.handleChanges} />
 
                         <DatesForm currentReceipt={this.state.currentReceipt} handleChanges={this.handleChanges} />
 
