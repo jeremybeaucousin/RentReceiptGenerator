@@ -44,8 +44,15 @@ export class DatesForm extends React.Component {
                 currentReceipt = this.calculatePeriodesFromDateTransmission(currentReceipt);
             }
             this.handleChanges(currentReceipt);
-            return { currentReceipt };
         });
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if ((this.props.currentReceipt !== this.state.currentReceipt) || (prevState.currentReceipt !== this.state.currentReceipt)) {
+            this.setState((state, props) => {
+                return { currentReceipt: props.currentReceipt };
+            });
+        };
     }
 
     render() {

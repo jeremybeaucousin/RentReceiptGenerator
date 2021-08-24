@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FormGroup, FormControl, Row, Col, Jumbotron } from 'react-bootstrap';
+import { FormGroup, FormControl, Row, Jumbotron } from 'react-bootstrap';
 
 import './RentReceiptForm.css';
 
@@ -14,7 +14,6 @@ import { DatesForm } from "./DatesForm";
 import { PdfReiceptRender } from "./PdfReiceptRender";
 
 export default class RentReceiptForm extends React.Component {
-
     constructor(props) {
         super(props);
 
@@ -31,12 +30,16 @@ export default class RentReceiptForm extends React.Component {
             currentReceipt: receipts[0],
             receipts: receipts
         }
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChanges = newCurrentReceipt => {
         this.setState(prevState => {
             let currentReceipt = Object.assign({}, prevState.currentReceipt);
             currentReceipt = newCurrentReceipt;
+            console.log(currentReceipt);
+            console.log(this.state);
             return { currentReceipt };
         });
     }

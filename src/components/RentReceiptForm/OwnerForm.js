@@ -7,7 +7,7 @@ export class OwnerForm extends React.Component {
         super(props);
         this.handleChanges = props.handleChanges;
         this.state = {
-            currentReceipt: props.currentReceipt
+            owner: props.currentReceipt.owner
         };
     }
 
@@ -15,19 +15,20 @@ export class OwnerForm extends React.Component {
         let value = event.target.value;
         const column = event.target.name;
         this.setState(prevState => {
-            let currentReceipt = Object.assign({}, prevState.currentReceipt);
-            currentReceipt.owner[column] = value;
+            let owner = Object.assign({}, prevState.owner);
+            let currentReceipt = this.props.currentReceipt;
+            owner[column] = value;
+            currentReceipt.owner = owner;
             this.handleChanges(currentReceipt);
-            return { currentReceipt };
         });
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if ((this.props.currentReceipt !== this.state.currentReceipt) || (prevState.currentReceipt !== this.state.currentReceipt)) {
+        if ((this.props.currentReceipt.owner !== this.state.owner) || (prevState.owner !== this.state.owner)) {
             this.setState((state, props) => {
-                return { currentReceipt: props.currentReceipt };
+                return { owner: props.currentReceipt.owner };
             });
-        }
+        };
     }
 
     render() {
@@ -36,17 +37,17 @@ export class OwnerForm extends React.Component {
                 <FormGroup className="row">
                     <div className="col-sm-6">
                         <label htmlFor="RentReceiptFormOwnerFirstName"> Prénom du propriétaire : </label>
-                        <FormControl type="text" name="firstName" id="RentReceiptFormOwnerFirstName" value={this.state.currentReceipt.owner.firstName} onChange={this.handleOwnerChange} />
+                        <FormControl type="text" name="firstName" id="RentReceiptFormOwnerFirstName" value={this.state.owner.firstName} onChange={this.handleOwnerChange} />
                     </div>
 
                     <div className="col-sm-6">
                         <label htmlFor="RentReceiptFormOwnerLastName"> Nom du propriétaire : </label>
-                        <FormControl type="text" name="lastName" id="RentReceiptFormOwnerLastName" value={this.state.currentReceipt.owner.lastName} onChange={this.handleOwnerChange} />
+                        <FormControl type="text" name="lastName" id="RentReceiptFormOwnerLastName" value={this.state.owner.lastName} onChange={this.handleOwnerChange} />
                     </div>
                 </FormGroup>
                 <FormGroup>
                     <label htmlFor="RentReceiptFormOwnerAdress"> Adresse du propriétaire : </label>
-                    <textarea className="form-control textarea-autosize" name="adress" id="RentReceiptFormOwnerAdress" value={this.state.currentReceipt.owner.adress} onChange={this.handleOwnerChange} />
+                    <textarea className="form-control textarea-autosize" name="adress" id="RentReceiptFormOwnerAdress" value={this.state.owner.adress} onChange={this.handleOwnerChange} />
                 </FormGroup>
             </div>
         );
