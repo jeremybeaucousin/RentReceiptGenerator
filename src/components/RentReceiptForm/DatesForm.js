@@ -7,7 +7,7 @@ import { convertDateToStringInput } from "../../utils/DateUtils";
 export class DatesForm extends React.Component {
     constructor(props) {
         super(props);
-        this.handleDatesChange = props.handleDatesChange;
+        this.handleChanges = props.handleChanges;
         let currentReceipt = this.calculatePeriodesFromDateTransmission(props.currentReceipt);
         this.state = {
             currentReceipt: currentReceipt
@@ -43,7 +43,7 @@ export class DatesForm extends React.Component {
             if (receiptColumn === "dateTransmission") {
                 currentReceipt = this.calculatePeriodesFromDateTransmission(currentReceipt);
             }
-            this.handleDatesChange(currentReceipt);
+            this.handleChanges(currentReceipt);
             return { currentReceipt };
         });
     }

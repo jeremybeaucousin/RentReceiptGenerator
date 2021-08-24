@@ -36,27 +36,11 @@ export default class RentReceiptForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    // onReceiptChange = currentReceipt => {
-    //     this.setState({
-    //         currentReceipt: currentReceipt
-    //     });
-    // }
-
     handleTenantSelection = event => {
         let value = event.target.value;
         this.setState(prevState => {
             let currentReceipt = Object.assign({}, prevState.currentReceipt);
             currentReceipt = this.state.receipts[value];
-            return { currentReceipt };
-        });
-    }
-
-    handleOwnerChange = event => {
-        let value = event.target.value;
-        const column = event.target.name;
-        this.setState(prevState => {
-            let currentReceipt = Object.assign({}, prevState.currentReceipt);
-            currentReceipt.owner[column] = value;
             return { currentReceipt };
         });
     }
@@ -71,7 +55,7 @@ export default class RentReceiptForm extends React.Component {
         });
     }
 
-    handleDatesChange = newCurrentReceipt => {
+    handleChanges = newCurrentReceipt => {
         this.setState(prevState => {
             let currentReceipt = Object.assign({}, prevState.currentReceipt);
             currentReceipt = newCurrentReceipt;
@@ -108,7 +92,7 @@ export default class RentReceiptForm extends React.Component {
                 <Jumbotron className="content col-sm-6">
                     <form onSubmit={this.handleSubmit}>
                         <TenantList onSelectTenant={this.handleTenantSelection} />
-                        <OwnerForm owner={this.state.currentReceipt.owner} handleOwnerChange={this.handleOwnerChange} />
+                        <OwnerForm currentReceipt={this.state.currentReceipt} handleChanges={this.handleChanges} />
                         <FormGroup >
                             <label htmlFor="RentReceiptFormAdresse"> Adresse du bien : </label>
                             <textarea className="form-control textarea-autosize" name="adress" id="RentReceiptFormAdresse" value={this.state.currentReceipt.adress} onChange={this.handleChange} />
@@ -116,7 +100,7 @@ export default class RentReceiptForm extends React.Component {
 
                         <TenantForm tenant={this.state.currentReceipt.tenant} handleTenantChange={this.handleTenantChange} />
 
-                        <DatesForm currentReceipt={this.state.currentReceipt} handleDatesChange={this.handleDatesChange} />
+                        <DatesForm currentReceipt={this.state.currentReceipt} handleChanges={this.handleChanges} />
 
                         <FormGroup >
                             <label htmlFor="RentReceiptFormRent"> Loyer mensuel contractuel : </label>
@@ -138,7 +122,6 @@ export default class RentReceiptForm extends React.Component {
                         </FormGroup>
                     </form>
                 </Jumbotron>
-                {/* onReceiptChange={this.onReceiptChange} */}
                 <PdfReiceptRender currentReceipt={this.state.currentReceipt} />
             </Row>
         );
