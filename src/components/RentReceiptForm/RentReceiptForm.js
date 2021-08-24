@@ -38,8 +38,6 @@ export default class RentReceiptForm extends React.Component {
         this.setState(prevState => {
             let currentReceipt = Object.assign({}, prevState.currentReceipt);
             currentReceipt = newCurrentReceipt;
-            console.log(currentReceipt);
-            console.log(this.state);
             return { currentReceipt };
         });
     }

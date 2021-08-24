@@ -19,7 +19,6 @@ export class TenantList extends React.Component {
             let currentReceipt = this.props.currentReceipt;
             currentReceipt = this.props.receipts[value];
             this.handleChanges(currentReceipt);
-            return { currentReceipt };
         });
     }
 
