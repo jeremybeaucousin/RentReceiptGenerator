@@ -7,12 +7,23 @@ import Tenants from '../../data/Tenants.json';
 export class TenantList extends React.Component {
     constructor(props) {
         super(props);
-        this.onSelectTenant = props.onSelectTenant;
+        this.handleChanges = props.handleChanges;
         this.state = {
+            currentReceipt: props.currentReceipt,
+            receipts: props.receipts,
             tenants: []
         };
     }
 
+    handleTenantSelection = event => {
+        let value = event.target.value;
+        this.setState(prevState => {
+            let currentReceipt = Object.assign({}, prevState.currentReceipt);
+            currentReceipt = this.state.receipts[value];
+            this.handleChanges(currentReceipt);
+            return { currentReceipt };
+        });
+    }
 
     componentDidMount() {
         // fetch("https://fairestdb.p.rapidapi.com/friend/friendModel", {
@@ -49,7 +60,7 @@ export class TenantList extends React.Component {
             <FormGroup className="row">
                 <div className="col-sm-6">
                     <label htmlFor="RentReceiptTenants"> Choix du locataire : </label>
-                    <FormControl id="RentReceiptTenants" as="select" onChange={this.onSelectTenant} custom>
+                    <FormControl id="RentReceiptTenants" as="select" onChange={this.handleTenantSelection} custom>
                         {this.listReceipts()}
                     </FormControl>
                 </div>

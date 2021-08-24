@@ -31,18 +31,6 @@ export default class RentReceiptForm extends React.Component {
             currentReceipt: receipts[0],
             receipts: receipts
         }
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleTenantSelection = event => {
-        let value = event.target.value;
-        this.setState(prevState => {
-            let currentReceipt = Object.assign({}, prevState.currentReceipt);
-            currentReceipt = this.state.receipts[value];
-            return { currentReceipt };
-        });
     }
 
     handleChanges = newCurrentReceipt => {
@@ -79,7 +67,7 @@ export default class RentReceiptForm extends React.Component {
             <Row>
                 <Jumbotron className="content col-sm-6">
                     <form onSubmit={this.handleSubmit}>
-                        <TenantList onSelectTenant={this.handleTenantSelection} />
+                        <TenantList currentReceipt={this.state.currentReceipt} receipts={this.state.receipts} handleChanges={this.handleChanges} />
                         <OwnerForm currentReceipt={this.state.currentReceipt} handleChanges={this.handleChanges} />
                         <FormGroup >
                             <label htmlFor="RentReceiptFormAdresse"> Adresse du bien : </label>
