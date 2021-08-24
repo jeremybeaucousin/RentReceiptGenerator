@@ -5,14 +5,13 @@ import { FormGroup, FormControl, Row, Col, Jumbotron } from 'react-bootstrap';
 import './RentReceiptForm.css';
 
 import { pdfMakeTable } from '../../model/RentReceiptDocument';
-import { getDocumentDefinition } from '../../model/RentReceiptDocument';
-import pdfMake from "pdfmake/build/pdfmake";
 
 import receipts from '../../data/Receipts.json';
 import { TenantList } from "./TenantList";
 import { OwnerForm } from "./OwnerForm";
 import { TenantForm } from "./TenantForm";
 import { DatesForm } from "./DatesForm";
+import { PdfReiceptRender } from "./PdfReiceptRender";
 
 export default class RentReceiptForm extends React.Component {
 
@@ -37,40 +36,17 @@ export default class RentReceiptForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    onReceiptChange = currentReceipt => {
-        this.setState({
-            currentReceipt: currentReceipt
-        });
-        this.reloadPdf();
-    }
-
-    reloadPdf() {
-        const pdfDocGenerator = pdfMake.createPdf(getDocumentDefinition(this.state.currentReceipt));
-        pdfDocGenerator.getDataUrl((dataUrl) => {
-            const targetElement = document.querySelector('#iframePdf');
-            let iframe = targetElement.querySelector('iframe');
-            let newIframe = false;
-            if (!iframe) {
-                newIframe = true;
-                iframe = document.createElement('iframe');
-                iframe.width = "100%";
-                iframe.height = "1100px";
-            }
-            iframe.src = dataUrl;
-            if (newIframe) {
-                targetElement.appendChild(iframe);
-            }
-        }
-        );
-    }
+    // onReceiptChange = currentReceipt => {
+    //     this.setState({
+    //         currentReceipt: currentReceipt
+    //     });
+    // }
 
     handleTenantSelection = event => {
         let value = event.target.value;
-        console.log(value);
         this.setState(prevState => {
             let currentReceipt = Object.assign({}, prevState.currentReceipt);
             currentReceipt = this.state.receipts[value];
-            console.log(currentReceipt);
             return { currentReceipt };
         });
     }
@@ -127,7 +103,6 @@ export default class RentReceiptForm extends React.Component {
     }
 
     render() {
-        this.reloadPdf();
         return (
             <Row>
                 <Jumbotron className="content col-sm-6">
@@ -163,7 +138,8 @@ export default class RentReceiptForm extends React.Component {
                         </FormGroup>
                     </form>
                 </Jumbotron>
-                <Col width="100%" sm="6" id="iframePdf" />
+                {/* onReceiptChange={this.onReceiptChange} */}
+                <PdfReiceptRender currentReceipt={this.state.currentReceipt} />
             </Row>
         );
     }
