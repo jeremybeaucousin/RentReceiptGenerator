@@ -1,9 +1,52 @@
 import React from 'react';
 
 export class TenantAdmin extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          error: null,
+          isLoaded: false,
+          items: []
+        };
+      }
+
+    componentDidMount() {
+        console.log(process.env.RENT_RECEIPT_API_URL);
+        fetch(process.env.RENT_RECEIPT_API_URL + "/users")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        isLoaded: true,
+                        users: result
+                    });
+                },
+
+                (error) => {
+                    console.error(error);
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            )
+    }
     render() {
-        return (
-            <h3>Tenant administration</h3>
-        );
+        const { error, isLoaded, users } = this.state;
+        if (error) {
+            return <div>Error: {error.message}</div>;
+        } else if (!isLoaded) {
+            return <div>Loading...</div>;
+        } else {
+            return (
+                <ul>
+                    {users.map(user => (
+                        <li key={user.id}>
+                            {user.firstname} {user.lastname}
+                        </li>
+                    ))}
+                </ul>
+            );
+        }
     }
 }
