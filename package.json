@@ -16,7 +16,7 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
-    "dev": "set RENT_RECEIPT_API_URL=http://localhost:8080/ && react-scripts start",
+    "dev": "react-scripts start",
     "start": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
