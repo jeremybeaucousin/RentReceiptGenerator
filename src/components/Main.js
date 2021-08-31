@@ -8,7 +8,7 @@ import RentReceiptForm from "./RentReceiptForm/RentReceiptForm";
 
 import { TenantAdmin } from './TenantAdmin'
 
-const { REACT_APP_RENT_RECEIPT_API_URL, REACT_APP_NAME, REACT_APP_VERSION } = process.env;
+const { REACT_APP_NAME, REACT_APP_VERSION } = process.env;
 
 
 class Main extends Component {

@@ -6,6 +6,7 @@ import * as serviceWorker from './serviceWorker';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+console.log("Envs : ", process.env)
 ReactDOM.render(
   <Main />,
   document.getElementById('root')
