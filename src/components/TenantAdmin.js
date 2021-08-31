@@ -11,8 +11,7 @@ export class TenantAdmin extends React.Component {
       }
 
     componentDidMount() {
-        console.log(process.env.RENT_RECEIPT_API_URL);
-        fetch(process.env.RENT_RECEIPT_API_URL + "/users")
+        fetch(process.env.REACT_APP_RENT_RECEIPT_API_URL + "/users")
             .then(res => res.json())
             .then(
                 (result) => {

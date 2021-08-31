@@ -8,6 +8,8 @@ import RentReceiptForm from "./RentReceiptForm/RentReceiptForm";
 
 import { TenantAdmin } from './TenantAdmin'
 
+const { REACT_APP_RENT_RECEIPT_API_URL, REACT_APP_NAME, REACT_APP_VERSION } = process.env;
+
 
 class Main extends Component {
     render() {
@@ -40,7 +42,7 @@ class Main extends Component {
                 <footer>
                     <Row className="bg-light">
                         <Col>jeremy.beaucousin@gmail.com</Col>
-                        <Col align="right">{process.env.REACT_APP_NAME} <b>V{process.env.REACT_APP_VERSION}</b></Col>
+                        <Col align="right">{REACT_APP_NAME} <b>V{REACT_APP_VERSION}</b></Col>
                     </Row>
                 </footer>
             </Container >
