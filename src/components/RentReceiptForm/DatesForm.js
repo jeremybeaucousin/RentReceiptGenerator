@@ -50,6 +50,7 @@ export class DatesForm extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         if ((this.props.currentReceipt !== this.state.currentReceipt) || (prevState.currentReceipt !== this.state.currentReceipt)) {
             this.setState((state, props) => {
+                this.calculatePeriodesFromDateTransmission(props.currentReceipt);
                 return { currentReceipt: props.currentReceipt };
             });
         };
