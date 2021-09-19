@@ -7,7 +7,7 @@ export class TenantForm extends React.Component {
         super(props);
         this.handleChanges = props.handleChanges;
         this.state = {
-            tenant: props.currentReceipt.tenant
+            tenant: props.tenant
         };
     }
 
@@ -15,18 +15,16 @@ export class TenantForm extends React.Component {
         let value = event.target.value;
         const column = event.target.name;
         this.setState(prevState => {
-            let tenant = Object.assign({}, prevState.tenant);
-            let currentReceipt = this.props.currentReceipt;
+            let tenant = Object.assign(Object.create(Object.getPrototypeOf(prevState.tenant)), prevState.tenant);
             tenant[column] = value;
-            currentReceipt.tenant = tenant;
-            this.handleChanges(currentReceipt);
+            this.handleChanges(tenant);
         });
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if ((this.props.currentReceipt.tenant !== this.state.tenant) || (prevState.tenant !== this.state.tenant)) {
+        if ((this.props.tenant !== this.state.tenant) || (prevState.tenant !== this.state.tenant)) {
             this.setState((state, props) => {
-                return { tenant: props.currentReceipt.tenant };
+                return { tenant: props.tenant };
             });
         }
     }

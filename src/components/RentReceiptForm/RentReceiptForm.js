@@ -46,6 +46,8 @@ export default class RentReceiptForm extends React.Component {
                 currentReceipt = object;
             } else if (object instanceof Owner) {
                 currentReceipt.owner = object;
+            } else if (object instanceof Tenant) {
+                currentReceipt.tenant = object;
             }
 
             return { currentReceipt };
@@ -85,7 +87,7 @@ export default class RentReceiptForm extends React.Component {
                             <textarea className="form-control textarea-autosize" name="adress" id="RentReceiptFormAdresse" value={this.state.currentReceipt.adress} onChange={this.handleChange} />
                         </FormGroup>
 
-                        <TenantForm currentReceipt={this.state.currentReceipt} handleChanges={this.handleChanges} />
+                        <TenantForm tenant={this.state.currentReceipt.tenant} handleChanges={this.handleChanges} />
 
                         <DatesForm currentReceipt={this.state.currentReceipt} handleChanges={this.handleChanges} />
 
