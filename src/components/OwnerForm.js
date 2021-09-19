@@ -7,7 +7,7 @@ export class OwnerForm extends React.Component {
         super(props);
         this.handleChanges = props.handleChanges;
         this.state = {
-            owner: props.currentReceipt.owner
+            owner: props.owner
         };
     }
 
@@ -15,18 +15,16 @@ export class OwnerForm extends React.Component {
         let value = event.target.value;
         const column = event.target.name;
         this.setState(prevState => {
-            let owner = Object.assign({}, prevState.owner);
-            let currentReceipt = this.props.currentReceipt;
+            let owner = Object.assign(Object.create(Object.getPrototypeOf(prevState.owner)), prevState.owner);
             owner[column] = value;
-            currentReceipt.owner = owner;
-            this.handleChanges(currentReceipt);
+            this.handleChanges(owner);
         });
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if ((this.props.currentReceipt.owner !== this.state.owner) || (prevState.owner !== this.state.owner)) {
+        if ((this.props.owner !== this.state.owner) || (prevState.owner !== this.state.owner)) {
             this.setState((state, props) => {
-                return { owner: props.currentReceipt.owner };
+                return { owner: props.owner };
             });
         };
     }

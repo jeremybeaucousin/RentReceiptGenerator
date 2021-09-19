@@ -5,11 +5,14 @@ import { FormGroup, FormControl, Row, Jumbotron } from 'react-bootstrap';
 import './RentReceiptForm.css';
 
 import { pdfMakeTable } from '../../model/RentReceiptDocument';
+import Receipt from '../../model/Receipt';
+import Owner from '../../model/Owner';
+import Tenant from '../../model/Tenant';
 
 import receipts from '../../data/Receipts.json';
 import { TenantList } from "./TenantList";
-import { OwnerForm } from "./OwnerForm";
-import { TenantForm } from "./TenantForm";
+import { OwnerForm } from "../OwnerForm";
+import { TenantForm } from "../TenantForm";
 import { DatesForm } from "./DatesForm";
 import { PdfReiceptRender } from "./PdfReiceptRender";
 
@@ -19,25 +22,32 @@ export default class RentReceiptForm extends React.Component {
 
         const today = new Date();
 
+        const stateReceipts = [];
+
         receipts.forEach(receipt => {
-            receipt.dateTransmission = today;
-            receipt.periodeStart = today;
-            receipt.periodeEnd = today;
-            receipt.paidDate = today;
+            const owner = new Owner(receipt.owner.firstName, receipt.owner.lastName, receipt.owner.adress);
+            const tenant = new Tenant(receipt.tenant.firstName, receipt.tenant.lastName, receipt.tenant.adress);
+
+            stateReceipts.push(new Receipt(owner, tenant, receipt.adress, today, today, today, receipt.rent, receipt.charges, receipt.amountPaid, today));
         })
 
         this.state = {
-            currentReceipt: receipts[0],
-            receipts: receipts
+            currentReceipt: stateReceipts[0],
+            receipts: stateReceipts
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChanges = newCurrentReceipt => {
+    handleChanges = object => {
         this.setState(prevState => {
             let currentReceipt = Object.assign({}, prevState.currentReceipt);
-            currentReceipt = newCurrentReceipt;
+            if (object instanceof Receipt) {
+                currentReceipt = object;
+            } else if (object instanceof Owner) {
+                currentReceipt.owner = object;
+            }
+
             return { currentReceipt };
         });
     }
@@ -69,7 +79,7 @@ export default class RentReceiptForm extends React.Component {
                 <Jumbotron className="content col-sm-6">
                     <form onSubmit={this.handleSubmit}>
                         <TenantList currentReceipt={this.state.currentReceipt} receipts={this.state.receipts} handleChanges={this.handleChanges} />
-                        <OwnerForm currentReceipt={this.state.currentReceipt} handleChanges={this.handleChanges} />
+                        <OwnerForm owner={this.state.currentReceipt.owner} handleChanges={this.handleChanges} />
                         <FormGroup >
                             <label htmlFor="RentReceiptFormAdresse"> Adresse du bien : </label>
                             <textarea className="form-control textarea-autosize" name="adress" id="RentReceiptFormAdresse" value={this.state.currentReceipt.adress} onChange={this.handleChange} />
