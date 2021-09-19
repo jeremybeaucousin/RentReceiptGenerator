@@ -48,6 +48,8 @@ export default class RentReceiptForm extends React.Component {
                 currentReceipt.owner = object;
             } else if (object instanceof Tenant) {
                 currentReceipt.tenant = object;
+            } else {
+                currentReceipt = object;
             }
 
             return { currentReceipt };
