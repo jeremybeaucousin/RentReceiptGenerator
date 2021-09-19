@@ -17,18 +17,18 @@
     },
     {
         "owner" : {
-            "firstName" : "Jérémy",
-            "lastName" : "BEAUCOUSIN-Rodriguez",
-            "adress" : "66 Route de Rennes\n44000 Nantes\nFrance"
+            "firstName" : "Maison C&J",
+            "lastName" : "BEAUCOUSIN",
+            "adress" : "13 rue tadhomme\n76620 Le Havre\nFrance"
         },
         "tenant" : {
-            "firstName" : "La Meuf",
-            "lastName" : "NOM à la CON",
-            "adress" : "Nulle part"
+            "firstName": "Kermanec",
+            "lastName": "Sandra",
+            "adress": "38 Rue aux chats\n76700 MONTIVILLIERS\nFrance"
         },
-        "adress" : "Nulle part ailleurs",
-        "rent" : 1000000,
-        "charges" : 0,
-        "amountPaid" : 1000000
+        "adress" : "38 Rue aux chats\n76700 MONTIVILLIERS\nFrance",
+        "rent" : 785,
+        "charges" : 15,
+        "amountPaid" : 800
     }
 ]
