@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "@types/react": "^17.0.18",
     "bootstrap": "^4.6.0",
+    "express": "^4.17.1",
     "pdfmake": "^0.1.72",
     "react": "^16.14.0",
     "react-bootstrap": "^1.6.1",
@@ -37,6 +38,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {}
+  }
 }
