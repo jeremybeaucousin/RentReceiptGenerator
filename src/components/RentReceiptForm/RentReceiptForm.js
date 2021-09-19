@@ -41,15 +41,13 @@ export default class RentReceiptForm extends React.Component {
 
     handleChanges = object => {
         this.setState(prevState => {
-            let currentReceipt = Object.assign({}, prevState.currentReceipt);
+            let currentReceipt = Object.assign(Object.create(Object.getPrototypeOf(prevState.currentReceipt)), prevState.currentReceipt);
             if (object instanceof Receipt) {
                 currentReceipt = object;
             } else if (object instanceof Owner) {
                 currentReceipt.owner = object;
             } else if (object instanceof Tenant) {
                 currentReceipt.tenant = object;
-            } else {
-                currentReceipt = object;
             }
 
             return { currentReceipt };
@@ -60,7 +58,7 @@ export default class RentReceiptForm extends React.Component {
         let value = event.target.value;
         const receiptColumn = event.target.name;
         this.setState(prevState => {
-            let currentReceipt = Object.assign({}, prevState.currentReceipt);
+            let currentReceipt = Object.assign(Object.create(Object.getPrototypeOf(prevState.currentReceipt)), prevState.currentReceipt);
             if (value && ["rent", "charges", "amountPaid"].includes(receiptColumn)) {
                 value = parseFloat(value);
             }

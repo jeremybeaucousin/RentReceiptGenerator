@@ -35,7 +35,7 @@ export class DatesForm extends React.Component {
         const receiptColumn = event.target.name;
         let value = event.target.value;
         this.setState(prevState => {
-            let currentReceipt = Object.assign({}, prevState.currentReceipt);
+            let currentReceipt = Object.assign(Object.create(Object.getPrototypeOf(prevState.currentReceipt)), prevState.currentReceipt);
             // Refresh periode dates
             value = new Date(value);
             currentReceipt[receiptColumn] = value;
