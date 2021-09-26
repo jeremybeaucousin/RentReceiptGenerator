@@ -18,7 +18,7 @@ import { TenantForm } from "../TenantForm";
 import { DatesForm } from "./DatesForm";
 import { PdfReiceptRender } from "./PdfReiceptRender";
 
-export default class RentReceiptForm extends React.Component {
+export class RentReceiptForm extends React.Component {
     constructor(props) {
         super(props);
 
@@ -37,7 +37,7 @@ export default class RentReceiptForm extends React.Component {
             currentReceipt: stateReceipts[0],
             receipts: stateReceipts
         }
-        console.log(getSessionCookie());
+        console.log("RentReceiptForm", getSessionCookie());
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }

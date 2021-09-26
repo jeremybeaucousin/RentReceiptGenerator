@@ -50,5 +50,4 @@ export class TenantForm extends React.Component {
             </div>
         );
     }
-
 }
