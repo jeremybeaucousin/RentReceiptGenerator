@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab, Form, Button } from 'react-bootstrap';
 
 import { getSessionCookie, setSessionCookie } from "../model/Session";
 
@@ -8,6 +8,7 @@ import { OwnerForm } from './OwnerForm'
 
 import { PropertiesAdmin } from './PropertiesAdmin'
 
+const REICEPT_API_URL = process.env.REACT_APP_RENT_RECEIPT_API_URL;
 export class OwnerAdmin extends React.Component {
     constructor(props) {
         super(props);
@@ -17,6 +18,7 @@ export class OwnerAdmin extends React.Component {
         }
 
         this.handleChanges = this.handleChanges.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChanges = object => {
@@ -27,33 +29,40 @@ export class OwnerAdmin extends React.Component {
         });
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if ((this.props.owner !== this.state.owner) || (prevState.owner !== this.state.owner)) {
-            fetch(`${process.env.REACT_APP_RENT_RECEIPT_API_URL}owners/${this.state.owner.ID}`, {
-                method: 'PUT',
-                body: JSON.stringify(this.state.owner)
-            })
-                .then(
-                    (result) => {
-                        result.json()
+    handleSubmit(event) {
+        console.log(`${REICEPT_API_URL}owners/${this.state.owner.ID}`);
+        fetch(`${REICEPT_API_URL}owners/${this.state.owner.ID}`, {
+            method: 'PUT',
+            body: JSON.stringify(this.state.owner)
+        })
+            .then(
+                (result) => {
+                    console.log(result);
+                    result.json()
                         .then((data) => {
+                            console.log(data);
                             setSessionCookie(data);
                         })
-                        
-                    },
 
-                    (error) => {
-                        console.error(error);
-                    }
-                );
-        }
+                },
+
+                (error) => {
+                    console.error(error);
+                }
+            );
+            event.preventDefault()
     }
 
     render() {
         return (
             <Tabs defaultActiveKey="owner">
                 <Tab eventKey="owner" title="Propriétaire">
-                    <OwnerForm owner={this.state.owner} handleChanges={this.handleChanges} />
+                    <Form onSubmit={this.handleSubmit}>
+                        <OwnerForm owner={this.state.owner} handleChanges={this.handleChanges} />
+                        <Button variant="primary" type="submit">
+                            Enregistrer
+                        </Button>
+                    </Form>
                 </Tab>
                 <Tab eventKey="properties" title="Biens">
                     <PropertiesAdmin />
