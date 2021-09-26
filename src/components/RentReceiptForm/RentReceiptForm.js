@@ -4,6 +4,8 @@ import { FormGroup, FormControl, Row, Jumbotron } from 'react-bootstrap';
 
 import './RentReceiptForm.css';
 
+import { getSessionCookie } from "../../model/Session";
+
 import { pdfMakeTable } from '../../model/RentReceiptDocument';
 import Receipt from '../../model/Receipt';
 import Owner from '../../model/Owner';
@@ -35,6 +37,7 @@ export default class RentReceiptForm extends React.Component {
             currentReceipt: stateReceipts[0],
             receipts: stateReceipts
         }
+        console.log(getSessionCookie());
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }

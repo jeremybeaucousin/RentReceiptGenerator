@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import { Container, Row, Col, Navbar, NavbarBrand, Nav, FormControl } from 'react-bootstrap';
+
+import { SessionContext, getSessionCookie, setSessionCookie } from "../model/Session";
 
 import './Main.css';
 
@@ -12,13 +14,24 @@ import { TenantAdmin } from './TenantAdmin'
 
 const { REACT_APP_NAME, REACT_APP_VERSION } = process.env;
 
+const ProtectedHandler = () => {
+    const session = useContext(SessionContext);
+    console.log(session);
+    return (
+        <div>
+            <h6>Veuillez selectionner un propriétaire</h6>
+        </div>
+    );
+};
+
 class Main extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             error: null,
-            owners: []
+            owners: [],
+            currentOwner: null
         };
 
         this.ownerSelection = this.ownerSelection.bind(this);
@@ -45,9 +58,13 @@ class Main extends Component {
 
     ownerSelection(event) {
         let value = parseInt(event.target.value);
-        const receiptColumn = event.target.name;
+        // const receiptColumn = event.target.name;
         let selectedOwner = this.state.owners.find(owner => owner.ID === value);
         console.log(selectedOwner);
+        this.setState({
+            currentOwner: selectedOwner
+        });
+        setSessionCookie(selectedOwner);
     }
 
     render() {
@@ -55,6 +72,7 @@ class Main extends Component {
         if (error) {
             return <div>Error: {error.message}</div>;
         } else {
+            const session = getSessionCookie();
             return (
                 <Container>
                     <header>
@@ -71,7 +89,7 @@ class Main extends Component {
                                             </Col>
                                             {/*  */}
                                             <Col sm={6}>
-                                                <FormControl id="RentReceiptTenants" as="select" size="sm" className="align-middle"  onChange={this.ownerSelection} custom>
+                                                <FormControl id="RentReceiptTenants" as="select" size="sm" className="align-middle" onChange={this.ownerSelection} custom>
                                                     <option key='blankChoice' hidden value />
                                                     {owners.map(owner => (
                                                         <option key={owner.ID} value={owner.ID}>
@@ -97,12 +115,15 @@ class Main extends Component {
                             </Nav.Item>
                         </Nav>
                     </Row>
-                    <BrowserRouter>
-                        <Switch>
-                            <Route path="/tenantadmin" component={TenantAdmin} />
-                            <Route path="/" component={RentReceiptForm} />
-                        </Switch>
-                    </BrowserRouter>
+                    <SessionContext.Provider value={session}>
+                        <BrowserRouter>
+                            <Switch>
+                                <Route path="/tenantadmin" component={TenantAdmin} />
+                                <Route path="*" component={RentReceiptForm} />
+                                {/* <Route path="*" component={ProtectedHandler} /> */}
+                            </Switch>
+                        </BrowserRouter>
+                    </SessionContext.Provider>
                     <footer>
                         <Row className="bg-light">
                             <Col>jeremy.beaucousin@gmail.com</Col>
