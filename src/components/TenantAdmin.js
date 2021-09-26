@@ -6,7 +6,7 @@ export class TenantAdmin extends React.Component {
         this.state = {
           error: null,
           isLoaded: false,
-          items: []
+          users: []
         };
       }
 

@@ -1,0 +1,7 @@
+.form-group, .form-group label {
+    margin-bottom: 0 !important;
+}
+
+.navbar a {
+    width: 100%;
+}

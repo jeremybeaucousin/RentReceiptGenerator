@@ -2,7 +2,9 @@ import React, { Component } from "react";
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import { Container, Row, Col, Navbar, NavbarBrand, Nav } from 'react-bootstrap';
+import { Container, Row, Col, Navbar, NavbarBrand, Nav, FormControl } from 'react-bootstrap';
+
+import './Main.css';
 
 import RentReceiptForm from "./RentReceiptForm/RentReceiptForm";
 
@@ -10,43 +12,97 @@ import { TenantAdmin } from './TenantAdmin'
 
 const { REACT_APP_NAME, REACT_APP_VERSION } = process.env;
 
-
 class Main extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            error: null,
+            owners: []
+        };
+    }
+
+    componentDidMount() {
+        fetch(process.env.REACT_APP_RENT_RECEIPT_API_URL + "/owners")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        owners: result
+                    });
+                },
+
+                (error) => {
+                    console.error(error);
+                    this.setState({
+                        error
+                    });
+                }
+            )
+    }
+
     render() {
-        return (
-            <Container>
-                <header>
-                    <Navbar className="row navbar-light bg-light">
-                        <NavbarBrand href="#">
-                            <h3>Générateur de quittance de loyer</h3>
-                        </NavbarBrand>
-                    </Navbar>
-                </header>
-                <Row className="p-2 border">
-                    {/* variant="pills" */}
-                    <Nav defaultActiveKey="/">
-                        <Nav.Item>
-                            <Nav.Link href="/">Générateur</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link href="tenantadmin" eventKey="tenantadmin">Administration</Nav.Link>
-                        </Nav.Item>
-                    </Nav>
-                </Row>
-                <BrowserRouter>
-                    <Switch>
-                        <Route path="/tenantadmin" component={TenantAdmin} />
-                        <Route path="/" component={RentReceiptForm} />
-                    </Switch>
-                </BrowserRouter>
-                <footer>
-                    <Row className="bg-light">
-                        <Col>jeremy.beaucousin@gmail.com</Col>
-                        <Col align="right">{REACT_APP_NAME} <b>V{REACT_APP_VERSION}</b></Col>
+        const { error, owners } = this.state;
+        if (error) {
+            return <div>Error: {error.message}</div>;
+        } else {
+            return (
+                <Container>
+                    <header>
+                        <Navbar className="navbar-light bg-light">
+                            <NavbarBrand href="#">
+                                <Row className="align-items-center">
+                                    <Col sm={6}>
+                                        <h3>Générateur de quittance de loyer</h3>
+                                    </Col>
+                                    <Col align="right">
+                                        <Row>
+                                            <Col sm={6}>
+                                                <label htmlFor="RentReceiptTenants" class="align-middle"> Choix du propriétaire : </label>
+                                            </Col>
+                                            {/* onChange={this.handleTenantSelection}  */}
+                                            <Col sm={6}>
+                                                <FormControl id="RentReceiptTenants" as="select" size="sm" class="align-middle" custom>
+                                                    <option key='blankChoice' hidden value />
+                                                    {owners.map(owner => (
+                                                        <option key={owner.id}>
+                                                            {owner.firstname} {owner.lastname}
+                                                        </option>
+                                                    ))}
+                                                </FormControl>
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </NavbarBrand>
+                        </Navbar>
+                    </header>
+                    <Row className="p-2 border">
+                        {/* variant="pills" */}
+                        <Nav defaultActiveKey="/">
+                            <Nav.Item>
+                                <Nav.Link href="/">Générateur</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link href="tenantadmin" eventKey="tenantadmin">Administration</Nav.Link>
+                            </Nav.Item>
+                        </Nav>
                     </Row>
-                </footer>
-            </Container >
-        );
+                    <BrowserRouter>
+                        <Switch>
+                            <Route path="/tenantadmin" component={TenantAdmin} />
+                            <Route path="/" component={RentReceiptForm} />
+                        </Switch>
+                    </BrowserRouter>
+                    <footer>
+                        <Row className="bg-light">
+                            <Col>jeremy.beaucousin@gmail.com</Col>
+                            <Col align="right">{REACT_APP_NAME} <b>V{REACT_APP_VERSION}</b></Col>
+                        </Row>
+                    </footer>
+                </Container >
+            );
+        }
     }
 }
 
