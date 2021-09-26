@@ -9,13 +9,12 @@ import { SessionContext, getSessionCookie, clearSession } from "../model/Session
 import './Main.css';
 
 import { RentReceiptForm } from "./RentReceiptForm/RentReceiptForm";
-import { TenantAdmin } from './TenantAdmin'
+import { OwnerAdmin } from './OwnerAdmin'
 import { LoginForm } from './LoginForm'
 import AuthRoute from "../model/AuthRoute";
 
 const { REACT_APP_NAME, REACT_APP_VERSION } = process.env;
 class Main extends Component {
-
     handleLogout() {
         clearSession();
     }
@@ -60,7 +59,7 @@ class Main extends Component {
                                 <Nav.Link href="/rentreceiptform">Générateur</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
-                                <Nav.Link href="tenantadmin" eventKey="tenantadmin">Administration</Nav.Link>
+                                <Nav.Link href="owneradmin" eventKey="owneradmin">Administration</Nav.Link>
                             </Nav.Item>
                         </Nav>
                     </Row>
@@ -68,7 +67,7 @@ class Main extends Component {
                     <BrowserRouter>
                         <Switch>
                             <AuthRoute path="/rentreceiptform" component={RentReceiptForm} />
-                            <AuthRoute path="/tenantadmin" component={TenantAdmin} />
+                            <AuthRoute path="/owneradmin" component={OwnerAdmin} />
                             <Route path="*" component={LoginForm} />
                         </Switch>
                     </BrowserRouter>

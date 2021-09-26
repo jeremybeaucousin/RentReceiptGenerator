@@ -1,12 +1,12 @@
 [
     {
-        "firstName": "Léa",
-        "lastName": "LIMOGES",
+        "firstname": "Léa",
+        "lastname": "LIMOGES",
         "adress": "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance"
     },
     {
-        "firstName": "Kermanec",
-        "lastName": "Sandra",
+        "firstname": "Kermanec",
+        "lastname": "Sandra",
         "adress": "38 Rue aux chats\n76700 MONTIVILLIERS\nFrance"
     }
 ]

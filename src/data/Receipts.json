@@ -1,13 +1,13 @@
 [
     {
         "owner" : {
-            "firstName" : "Jonathan",
-            "lastName" : "BEAUCOUSIN",
+            "firstname" : "Jonathan",
+            "lastname" : "BEAUCOUSIN",
             "adress" : "13 rue tadhomme\n76620 Le Havre\nFrance"
         },
         "tenant" : {
-            "firstName" : "Léa",
-            "lastName" : "LIMOGES",
+            "firstname" : "Léa",
+            "lastname" : "LIMOGES",
             "adress" : "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance"
         },
         "adress" : "4ème étage\n187 rue de verdun\n76600 Le havre\nFrance",
@@ -17,13 +17,13 @@
     },
     {
         "owner" : {
-            "firstName" : "Maison C&J",
-            "lastName" : "BEAUCOUSIN",
+            "firstname" : "Maison C&J",
+            "lastname" : "BEAUCOUSIN",
             "adress" : "13 rue tadhomme\n76620 Le Havre\nFrance"
         },
         "tenant" : {
-            "firstName": "Kermanec",
-            "lastName": "Sandra",
+            "firstname": "Kermanec",
+            "lastname": "Sandra",
             "adress": "38 Rue aux chats\n76700 MONTIVILLIERS\nFrance"
         },
         "adress" : "38 Rue aux chats\n76700 MONTIVILLIERS\nFrance",

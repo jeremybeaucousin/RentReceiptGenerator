@@ -1,11 +1,11 @@
 export default class Tenant {
   constructor(
-    firstName,
-    lastName,
+    firstname,
+    lastname,
     adress,
   ) {
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.firstname = firstname;
+    this.lastname = lastname;
     this.adress = adress;
   }
 }

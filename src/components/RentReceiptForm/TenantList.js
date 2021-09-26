@@ -47,7 +47,7 @@ export class TenantList extends React.Component {
     listReceipts() {
         return this.state.tenants.map((tenant, index) =>
             <option key={index} value={index}>
-                {tenant.lastName} {tenant.firstName}
+                {tenant.lastname} {tenant.firstname}
             </option>
         );
     }

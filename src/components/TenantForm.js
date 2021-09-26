@@ -34,12 +34,12 @@ export class TenantForm extends React.Component {
             <div>
                 <FormGroup className="row">
                     <div className="col-sm-6">
-                        <label htmlFor="firstName"> Prénom du locataire : </label>
-                        <FormControl type="text" name="firstName" id="firstName" value={this.state.tenant.firstName} onChange={this.handleTenantChange} />
+                        <label htmlFor="firstname"> Prénom du locataire : </label>
+                        <FormControl type="text" name="firstname" id="firstname" value={this.state.tenant.firstname} onChange={this.handleTenantChange} />
                     </div>
                     <div className="col-sm-6">
-                        <label htmlFor="lastName"> Nom du locataire : </label>
-                        <FormControl type="text" name="lastName" id="lastName" value={this.state.tenant.lastName} onChange={this.handleTenantChange} />
+                        <label htmlFor="lastname"> Nom du locataire : </label>
+                        <FormControl type="text" name="lastname" id="lastname" value={this.state.tenant.lastname} onChange={this.handleTenantChange} />
                     </div>
                 </FormGroup>
 

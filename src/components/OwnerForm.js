@@ -35,12 +35,12 @@ export class OwnerForm extends React.Component {
                 <FormGroup className="row">
                     <div className="col-sm-6">
                         <label htmlFor="RentReceiptFormOwnerFirstName"> Prénom du propriétaire : </label>
-                        <FormControl type="text" name="firstName" id="RentReceiptFormOwnerFirstName" value={this.state.owner.firstName} onChange={this.handleOwnerChange} />
+                        <FormControl type="text" name="firstname" id="RentReceiptFormOwnerFirstName" value={this.state.owner.firstname} onChange={this.handleOwnerChange} />
                     </div>
 
                     <div className="col-sm-6">
                         <label htmlFor="RentReceiptFormOwnerLastName"> Nom du propriétaire : </label>
-                        <FormControl type="text" name="lastName" id="RentReceiptFormOwnerLastName" value={this.state.owner.lastName} onChange={this.handleOwnerChange} />
+                        <FormControl type="text" name="lastname" id="RentReceiptFormOwnerLastName" value={this.state.owner.lastname} onChange={this.handleOwnerChange} />
                     </div>
                 </FormGroup>
                 <FormGroup>

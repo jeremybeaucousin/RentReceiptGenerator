@@ -4,7 +4,8 @@ import { Button, Col, Form, FormControl, FormGroup, FormLabel, Row } from 'react
 
 import './LoginForm.css';
 
-import { setSessionCookie } from "../model/Session";
+import { setSessionCookie, getSessionCookie } from "../model/Session";
+import { Redirect } from "react-router";
 
 export class LoginForm extends Component {
 
@@ -57,8 +58,11 @@ export class LoginForm extends Component {
 
     render() {
         const { error, owners } = this.state;
+        const session = getSessionCookie();
         if (error) {
             return <div>Error: {error.message}</div>;
+        } else if(session) {
+            return <Redirect to="/rentreceiptform" />
         } else {
             return (
                 <Row className="bg-light">

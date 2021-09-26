@@ -4,8 +4,6 @@ import { FormGroup, FormControl, Row, Jumbotron } from 'react-bootstrap';
 
 import './RentReceiptForm.css';
 
-import { getSessionCookie } from "../../model/Session";
-
 import { pdfMakeTable } from '../../model/RentReceiptDocument';
 import Receipt from '../../model/Receipt';
 import Owner from '../../model/Owner';
@@ -25,10 +23,9 @@ export class RentReceiptForm extends React.Component {
         const today = new Date();
 
         const stateReceipts = [];
-
         receipts.forEach(receipt => {
-            const owner = new Owner(receipt.owner.firstName, receipt.owner.lastName, receipt.owner.adress);
-            const tenant = new Tenant(receipt.tenant.firstName, receipt.tenant.lastName, receipt.tenant.adress);
+            const owner = new Owner(receipt.owner.firstname, receipt.owner.lastname, receipt.owner.adress);
+            const tenant = new Tenant(receipt.tenant.firstname, receipt.tenant.lastname, receipt.tenant.adress);
 
             stateReceipts.push(new Receipt(owner, tenant, receipt.adress, today, today, today, receipt.rent, receipt.charges, receipt.amountPaid, today));
         })
@@ -37,7 +34,6 @@ export class RentReceiptForm extends React.Component {
             currentReceipt: stateReceipts[0],
             receipts: stateReceipts
         }
-        console.log("RentReceiptForm", getSessionCookie());
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
