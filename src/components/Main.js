@@ -58,14 +58,14 @@ class Main extends Component {
                                     <Col align="right">
                                         <Row>
                                             <Col sm={6}>
-                                                <label htmlFor="RentReceiptTenants" class="align-middle"> Choix du propriétaire : </label>
+                                                <label htmlFor="RentReceiptTenants" className="align-middle"> Choix du propriétaire : </label>
                                             </Col>
                                             {/* onChange={this.handleTenantSelection}  */}
                                             <Col sm={6}>
-                                                <FormControl id="RentReceiptTenants" as="select" size="sm" class="align-middle" custom>
+                                                <FormControl id="RentReceiptTenants" as="select" size="sm" className="align-middle" custom>
                                                     <option key='blankChoice' hidden value />
                                                     {owners.map(owner => (
-                                                        <option key={owner.id}>
+                                                        <option key={owner.ID}>
                                                             {owner.firstname} {owner.lastname}
                                                         </option>
                                                     ))}
