@@ -130,7 +130,7 @@ export class PropertiesAdmin extends React.Component {
                                             <Col sm={2} align="right">
                                                 <Button variant="primary" type="submit">
                                                     Enregistrer
-                                            </Button>
+                                                </Button>
                                             </Col>
                                         </Row>
                                     </Form>

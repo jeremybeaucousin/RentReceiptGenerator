@@ -30,7 +30,6 @@ export class OwnerAdmin extends React.Component {
     }
 
     handleSubmit(event) {
-        console.log(`${REICEPT_API_URL}owners/${this.state.owner.ID}`);
         fetch(`${REICEPT_API_URL}owners/${this.state.owner.ID}`, {
             method: 'PUT',
             body: JSON.stringify(this.state.owner)
@@ -50,7 +49,7 @@ export class OwnerAdmin extends React.Component {
                     console.error(error);
                 }
             );
-            event.preventDefault()
+        event.preventDefault()
     }
 
     render() {

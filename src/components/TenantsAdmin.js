@@ -1,5 +1,11 @@
 import React from 'react';
 
+import { ListGroup, ListGroupItem } from 'react-bootstrap';
+
+import './TenantsAdmin.css';
+
+import { TenantAdmin } from './TenantAdmin';
+
 import { getSessionCookie } from "../model/Session";
 
 export class TenantsAdmin extends React.Component {
@@ -10,7 +16,6 @@ export class TenantsAdmin extends React.Component {
             isLoaded: false,
             tenants: []
         };
-
     }
 
     componentDidMount() {
@@ -36,16 +41,19 @@ export class TenantsAdmin extends React.Component {
                 }
             )
     }
+
     render() {
         const { isLoaded, tenants } = this.state;
         if (!isLoaded) {
             return <div>Loading...</div>;
         } else {
-            return <ul>
-                {tenants.map((tenant, index) => (
-                    <li key={tenant.ID}>{tenant.firstname} {tenant.lastname} : {tenant.adress}</li>
-                  ))}   
-            </ul>
+            return <ListGroup>
+                {tenants.map((tenant) => (
+                    <ListGroupItem key={tenant.ID} >
+                        <TenantAdmin tenant={tenant} />
+                    </ListGroupItem>
+                ))}
+            </ListGroup>
         }
     }
 }
