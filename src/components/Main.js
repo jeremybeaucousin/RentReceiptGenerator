@@ -20,6 +20,8 @@ class Main extends Component {
             error: null,
             owners: []
         };
+
+        this.ownerSelection = this.ownerSelection.bind(this);
     }
 
     componentDidMount() {
@@ -41,6 +43,13 @@ class Main extends Component {
             )
     }
 
+    ownerSelection(event) {
+        let value = parseInt(event.target.value);
+        const receiptColumn = event.target.name;
+        let selectedOwner = this.state.owners.find(owner => owner.ID === value);
+        console.log(selectedOwner);
+    }
+
     render() {
         const { error, owners } = this.state;
         if (error) {
@@ -60,12 +69,12 @@ class Main extends Component {
                                             <Col sm={6}>
                                                 <label htmlFor="RentReceiptTenants" className="align-middle"> Choix du propriétaire : </label>
                                             </Col>
-                                            {/* onChange={this.handleTenantSelection}  */}
+                                            {/*  */}
                                             <Col sm={6}>
-                                                <FormControl id="RentReceiptTenants" as="select" size="sm" className="align-middle" custom>
+                                                <FormControl id="RentReceiptTenants" as="select" size="sm" className="align-middle"  onChange={this.ownerSelection} custom>
                                                     <option key='blankChoice' hidden value />
                                                     {owners.map(owner => (
-                                                        <option key={owner.ID}>
+                                                        <option key={owner.ID} value={owner.ID}>
                                                             {owner.firstname} {owner.lastname}
                                                         </option>
                                                     ))}
