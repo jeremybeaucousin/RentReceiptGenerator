@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { Button, Accordion, Card, Form, FormControl, InputGroup, Row, Col } from 'react-bootstrap';
+import { Button, Accordion, Card, Form, FormControl, InputGroup, Row, Col, FormGroup } from 'react-bootstrap';
+
+import './PropertiesAdmin.css';
 
 import { getSessionCookie } from "../model/Session";
 
@@ -28,6 +30,9 @@ export class PropertiesAdmin extends React.Component {
         this.setState(prevState => {
             let currentProperty = Object.assign(Object.create(Object.getPrototypeOf(prevState.currentProperty)), prevState.currentProperty);
             const propertyIndex = this.state.properties.findIndex(property => property.ID === currentProperty.ID);
+            if (value && ["rent", "charges"].includes(column)) {
+                value = parseFloat(value);
+            }
             currentProperty[column] = value;
             this.state.properties[propertyIndex] = currentProperty;
             return { currentProperty: currentProperty }
@@ -127,12 +132,34 @@ export class PropertiesAdmin extends React.Component {
                                                     />
                                                 </InputGroup>
                                             </Col>
-                                            <Col sm={2} align="right">
-                                                <Button variant="primary" type="submit">
-                                                    Enregistrer
-                                                </Button>
+                                        </Row>
+                                        <Row>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text id="PropertiesAdminRent">Loyer :</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <FormControl placeholder="Loyer" type="number" name="rent" value={property.rent}
+                                                        aria-label="Loyer" aria-describedby="PropertiesAdminRent" onChange={this.handleChange}
+                                                    />
+                                                </InputGroup>
+                                            </Col>
+                                            <Col>
+                                                <InputGroup>
+                                                    <InputGroup.Prepend>
+                                                        <InputGroup.Text id="PropertiesAdminCharges">Charges :</InputGroup.Text>
+                                                    </InputGroup.Prepend>
+                                                    <FormControl placeholder="Charges" type="number" name="charges" value={property.charges}
+                                                        aria-label="Charges" aria-describedby="PropertiesAdminCharges" onChange={this.handleChange}
+                                                    />
+                                                </InputGroup>
                                             </Col>
                                         </Row>
+                                        <FormGroup>
+                                            <Button variant="primary" type="submit">
+                                                Enregistrer
+                                            </Button>
+                                        </FormGroup>
                                     </Form>
                                     {this.state.currentProperty && this.state.currentProperty.ID === property.ID &&
                                         <TenantsAdmin propertyId={property.ID} />
