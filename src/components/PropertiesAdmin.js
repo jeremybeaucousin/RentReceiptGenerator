@@ -116,7 +116,7 @@ export class PropertiesAdmin extends React.Component {
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text id="PropertiesAdminName">Nom du bien :</InputGroup.Text>
                                                     </InputGroup.Prepend>
-                                                    <FormControl placeholder="Nom du bien" name="name" type="textarea" value={property.name}
+                                                    <FormControl placeholder="Nom du bien" name="name" type="text" value={property.name}
                                                         aria-label="Nom du bien" aria-describedby="PropertiesAdminName" onChange={this.handleChange}
                                                     />
                                                 </InputGroup>
@@ -126,9 +126,8 @@ export class PropertiesAdmin extends React.Component {
                                                     <InputGroup.Prepend>
                                                         <InputGroup.Text id="PropertiesAdminAdresse">Addresse du bien :</InputGroup.Text>
                                                     </InputGroup.Prepend>
-                                                    <FormControl placeholder="Addresse du bien" name="adress" type="text" value={property.adress}
-                                                        aria-label="Addresse du bien" aria-describedby="PropertiesAdminAdresse" onChange={this.handleChange}
-                                                    />
+                                                    <textarea className="form-control textarea-autosize" name="adress" id="adresse" value={property.adress} onChange={this.handleChange} 
+                                                        aria-label="Addresse du bien" aria-describedby="PropertiesAdminAdresse" />
                                                 </InputGroup>
                                             </Col>
                                         </Row>

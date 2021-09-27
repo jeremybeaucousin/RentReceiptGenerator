@@ -108,9 +108,10 @@ export class RentReceiptForm extends React.Component {
                             const currentProperty = (data && data.length > 0) ? data[0] : null;
                             this.setState(prevState => {
                                 let currentReceipt = Object.assign(Object.create(Object.getPrototypeOf(prevState.currentReceipt)), prevState.currentReceipt);
-                                currentReceipt.property = new Property(currentProperty.ID, currentProperty.name, currentProperty.adress, currentProperty.rent, currentProperty.charges);
-                                currentReceipt.amountPaid = currentProperty.rent + currentProperty.charges;
+
                                 if (currentProperty) {
+                                    currentReceipt.property = new Property(currentProperty.ID, currentProperty.name, currentProperty.adress, currentProperty.rent, currentProperty.charges);
+                                    currentReceipt.amountPaid = currentProperty.rent + currentProperty.charges;
                                     this.getPropertyTenants(currentProperty.ID);
                                 }
                                 return {
@@ -141,7 +142,9 @@ export class RentReceiptForm extends React.Component {
                             const currentTenant = (data && data.length > 0) ? data[0] : null;
                             this.setState(prevState => {
                                 let currentReceipt = Object.assign(Object.create(Object.getPrototypeOf(prevState.currentReceipt)), prevState.currentReceipt);
-                                currentReceipt.tenant = new Tenant(currentTenant.ID, currentTenant.firstname, currentTenant.lastname, currentTenant.adress);
+                                if (currentTenant) {
+                                    currentReceipt.tenant = new Tenant(currentTenant.ID, currentTenant.firstname, currentTenant.lastname, currentTenant.adress);
+                                }
                                 return {
                                     currentReceipt: currentReceipt,
                                     tenants: data
@@ -191,7 +194,7 @@ export class RentReceiptForm extends React.Component {
                                         <FormControl id="RentReceiptTenants" as="select" onChange={this.handleTenantSelection} custom>
                                             {this.state.tenants.map((tenant, index) => (
                                                 <option key={index} value={index}>
-                                                    {tenant.name} {tenant.adress}
+                                                    {tenant.firstname} {tenant.lastname}
                                                 </option>
                                             ))}
                                         </FormControl>
