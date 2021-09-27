@@ -80,6 +80,7 @@ export class RentReceiptForm extends React.Component {
             let currentProperty = this.state.properties[propertyIndex];
             currentReceipt.property = currentProperty
             currentReceipt.amountPaid = currentProperty.rent + currentProperty.charges;
+            this.getPropertyTenants(currentProperty.ID);
             return { currentReceipt: currentReceipt };
         });
     }
@@ -107,7 +108,7 @@ export class RentReceiptForm extends React.Component {
                             const currentProperty = (data && data.length > 0) ? data[0] : null;
                             this.setState(prevState => {
                                 let currentReceipt = Object.assign(Object.create(Object.getPrototypeOf(prevState.currentReceipt)), prevState.currentReceipt);
-                                currentReceipt.property = new Property(currentProperty.name, currentProperty.adress, currentProperty.rent, currentProperty.charges);
+                                currentReceipt.property = new Property(currentProperty.ID, currentProperty.name, currentProperty.adress, currentProperty.rent, currentProperty.charges);
                                 currentReceipt.amountPaid = currentProperty.rent + currentProperty.charges;
                                 if (currentProperty) {
                                     this.getPropertyTenants(currentProperty.ID);
@@ -140,7 +141,7 @@ export class RentReceiptForm extends React.Component {
                             const currentTenant = (data && data.length > 0) ? data[0] : null;
                             this.setState(prevState => {
                                 let currentReceipt = Object.assign(Object.create(Object.getPrototypeOf(prevState.currentReceipt)), prevState.currentReceipt);
-                                currentReceipt.tenant = new Tenant(currentTenant.firstname, currentTenant.lastname, currentTenant.adress);
+                                currentReceipt.tenant = new Tenant(currentTenant.ID, currentTenant.firstname, currentTenant.lastname, currentTenant.adress);
                                 return {
                                     currentReceipt: currentReceipt,
                                     tenants: data
