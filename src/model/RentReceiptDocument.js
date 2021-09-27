@@ -10,6 +10,9 @@ export function getDocumentDefinition(receipt) {
   const periodeStart = convertDateToDisplayedString(receipt.periodeStart);
   const periodeEnd = convertDateToDisplayedString(receipt.periodeEnd);
   const paidDate = convertDateToDisplayedString(receipt.paidDate);
+  const tenantFirstName = (receipt.tenant) ? receipt.tenant.firstname : "";
+  const tenantLastName = (receipt.tenant) ? receipt.tenant.lastname : "";
+  const tenantAddress = (receipt.tenant) ? receipt.tenant.adress : "";
   return {
     pageSize: 'A4',
     pageOrientation: 'portrait',
@@ -57,7 +60,7 @@ export function getDocumentDefinition(receipt) {
               decoration: 'underline',
             },
             {
-              text: `${receipt.tenant.firstname} ${receipt.tenant.lastname}\n${receipt.tenant.adress}`,
+              text: `${tenantFirstName} ${tenantLastName}\n${tenantAddress}`,
               alignment: 'right',
             }
           ]
@@ -71,7 +74,7 @@ export function getDocumentDefinition(receipt) {
         decoration: 'underline',
       },
       {
-        text: `${receipt.adress}`,
+        text: `${receipt.property.adress}`,
         alignment: 'center',
       },
       {
@@ -84,11 +87,11 @@ export function getDocumentDefinition(receipt) {
           body: [
             [
               { text: 'Loyer mensuel contractuel' },
-              { text: `${receipt.rent} €` },
+              { text: `${receipt.property.rent} €` },
             ],
             [
               { text: 'Charges mensuelles contractuelles' },
-              { text: `${receipt.charges} €` },
+              { text: `${receipt.property.charges} €` },
             ],
             [
               { text: 'Période concerné' },
@@ -96,7 +99,7 @@ export function getDocumentDefinition(receipt) {
             ],
             [
               { text: 'Loyer charge comprise' },
-              { text: `${(receipt.rent + receipt.charges)} €` },
+              { text: `${(receipt.property.rent + receipt.property.charges)} €` },
             ]
           ]
         }

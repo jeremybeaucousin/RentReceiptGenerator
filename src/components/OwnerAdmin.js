@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Tabs, Tab, Form, Button, Modal, ModalTitle, ModalBody, ModalFooter } from 'react-bootstrap';
 
-import { getSessionCookie, setSessionCookie, clearSession } from "../model/Session";
+import { getSessionCookie, clearSession } from "../model/Session";
 
 import { OwnerForm } from './OwnerForm'
 
@@ -47,7 +47,6 @@ export class OwnerAdmin extends React.Component {
         })
             .then(
                 (result) => {
-                    console.log(result);
                     result.json()
                         .then((data) => {
                             clearSession();

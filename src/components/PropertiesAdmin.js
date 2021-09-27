@@ -78,7 +78,6 @@ export class PropertiesAdmin extends React.Component {
         })
             .then(
                 (result) => {
-                    console.log(result);
                     result.json()
                         .then((data) => {
                             console.log(data);
