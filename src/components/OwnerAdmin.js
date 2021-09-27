@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Tabs, Tab, Form, Button } from 'react-bootstrap';
+import { Tabs, Tab, Form, Button, Modal, ModalTitle, ModalBody, ModalFooter } from 'react-bootstrap';
 
-import { getSessionCookie, setSessionCookie } from "../model/Session";
+import { getSessionCookie, setSessionCookie, clearSession } from "../model/Session";
 
 import { OwnerForm } from './OwnerForm'
 
@@ -14,11 +14,15 @@ export class OwnerAdmin extends React.Component {
         super(props);
         const owner = getSessionCookie();
         this.state = {
-            owner: owner
+            owner: owner,
+            showModal: false,
+
         }
 
         this.handleChanges = this.handleChanges.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        this.handleValidate = this.handleValidate.bind(this);
     }
 
     handleChanges = object => {
@@ -30,6 +34,13 @@ export class OwnerAdmin extends React.Component {
     }
 
     handleSubmit(event) {
+        this.setState({
+            showModal: true
+        });
+        event.preventDefault()
+    }
+
+    handleValidate(event) {
         fetch(`${REICEPT_API_URL}owners/${this.state.owner.ID}`, {
             method: 'PUT',
             body: JSON.stringify(this.state.owner)
@@ -39,8 +50,9 @@ export class OwnerAdmin extends React.Component {
                     console.log(result);
                     result.json()
                         .then((data) => {
-                            console.log(data);
-                            setSessionCookie(data);
+                            clearSession();
+                            this.closeModal();
+                            window.location.reload();
                         })
 
                 },
@@ -49,24 +61,48 @@ export class OwnerAdmin extends React.Component {
                     console.error(error);
                 }
             );
-        event.preventDefault()
+    }
+
+    closeModal() {
+        this.setState({
+            showModal: false
+        });
     }
 
     render() {
         return (
-            <Tabs defaultActiveKey="owner">
-                <Tab eventKey="owner" title="Propriétaire">
-                    <Form onSubmit={this.handleSubmit}>
-                        <OwnerForm owner={this.state.owner} handleChanges={this.handleChanges} />
-                        <Button variant="primary" type="submit">
-                            Enregistrer
+            <>
+                <Tabs defaultActiveKey="owner">
+                    <Tab eventKey="owner" title="Propriétaire">
+                        <Form onSubmit={this.handleSubmit}>
+                            <OwnerForm owner={this.state.owner} handleChanges={this.handleChanges} />
+                            <Button variant="primary" type="submit">
+                                Enregistrer
                         </Button>
-                    </Form>
-                </Tab>
-                <Tab eventKey="properties" title="Biens">
-                    <PropertiesAdmin />
-                </Tab>
-            </Tabs>
+                        </Form>
+                    </Tab>
+                    <Tab eventKey="properties" title="Biens">
+                        <PropertiesAdmin />
+                    </Tab>
+                </Tabs>
+
+                <Modal show={this.state.showModal} onHide={this.closeModal}>
+                    <Modal.Header closeButton>
+                        <ModalTitle>Enregistrement des informations du propriétaire</ModalTitle>
+                    </Modal.Header>
+
+                    <ModalBody>
+                        <p>Cette action necessite de vous deconnecter</p>
+                        <p>Etes vous certains de vouloir enregistrer ?</p>
+                        <p>(vous serez deconnecter automatiquement à la validation)</p>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button variant="secondary" onClick={this.closeModal}>Annuler</Button>
+                        <Button variant="primary" onClick={this.handleValidate}>Valider</Button>
+                    </ModalFooter>
+                </Modal>
+            </>
         );
     }
 }
