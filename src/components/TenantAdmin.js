@@ -31,8 +31,18 @@ export class TenantAdmin extends React.Component {
 
     handleSubmit(event) {
         const owner = getSessionCookie();
-        fetch(`${REICEPT_API_URL}owners/${owner.ID}/properties/${this.state.tenant.property}/tenants/${this.state.tenant.ID}`, {
-            method: 'PUT',
+        let method;
+        let route;
+        if(this.state.tenant.ID) {
+            method = 'PUT';
+            route = `/${this.state.tenant.ID}`;
+            
+        } else {
+            method = 'POST';
+            route = '';
+        }
+        fetch(`${REICEPT_API_URL}owners/${owner.ID}/properties/${this.props.propertyId}/tenants${route}`, {
+            method: method,
             body: JSON.stringify(this.state.tenant)
         })
             .then(

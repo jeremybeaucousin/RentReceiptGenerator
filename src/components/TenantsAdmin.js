@@ -1,12 +1,14 @@
 import React from 'react';
 
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Row, Col, Button } from 'react-bootstrap';
 
 import './TenantsAdmin.css';
 
 import { TenantAdmin } from './TenantAdmin';
 
 import { getSessionCookie } from "../model/Session";
+
+import Tenant from "../model/Tenant";
 
 export class TenantsAdmin extends React.Component {
     constructor(props) {
@@ -16,6 +18,7 @@ export class TenantsAdmin extends React.Component {
             isLoaded: false,
             tenants: []
         };
+        this.handleAdd = this.handleAdd.bind(this);
     }
 
     componentDidMount() {
@@ -42,18 +45,34 @@ export class TenantsAdmin extends React.Component {
             )
     }
 
+    handleAdd(event) {
+        this.setState(prevState => {
+            let tenants = Object.assign([], prevState.tenants);
+            tenants.push(new Tenant());
+            return { tenants: tenants }
+        });
+        event.preventDefault()
+    }
+
     render() {
         const { isLoaded, tenants } = this.state;
         if (!isLoaded) {
             return <div>Loading...</div>;
         } else {
-            return <ListGroup>
-                {tenants.map((tenant) => (
-                    <ListGroupItem key={tenant.ID} >
-                        <TenantAdmin tenant={tenant} />
-                    </ListGroupItem>
-                ))}
-            </ListGroup>
+            return <>
+                <Row>
+                    <Col>
+                        <Button onClick={this.handleAdd} variant="success">Ajouter locataire</Button>
+                    </Col>
+                </Row>
+                <ListGroup>
+                    {tenants.map((tenant, index) => (
+                        <ListGroupItem key={index} >
+                            <TenantAdmin propertyId={this.props.propertyId} tenant={tenant} />
+                        </ListGroupItem>
+                    ))}
+                </ListGroup>
+            </>
         }
     }
 }
