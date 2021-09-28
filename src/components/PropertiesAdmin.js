@@ -9,6 +9,7 @@ import { getSessionCookie } from "../model/Session";
 import Property from "../model/Property";
 
 import { TenantsAdmin } from './TenantsAdmin';
+import { ConfirmationModal } from './ConfirmationModal';
 
 const REICEPT_API_URL = process.env.REACT_APP_RENT_RECEIPT_API_URL;
 
@@ -19,12 +20,16 @@ export class PropertiesAdmin extends React.Component {
             error: null,
             isLoaded: false,
             properties: [],
-            currentProperty: null
+            currentProperty: null,
+            displayPropertyDeletionModal: false
         };
         this.setCurrentProperty = this.setCurrentProperty.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
+        this.displayPropertyDeletionModal = this.displayPropertyDeletionModal.bind(this);
+        this.deleteProperty = this.deleteProperty.bind(this);
+        this.handleDeletePropertySelection = this.handleDeletePropertySelection.bind(this);
     }
 
     handleChange = event => {
@@ -39,7 +44,7 @@ export class PropertiesAdmin extends React.Component {
             }
             currentProperty[column] = value;
             properties[propertyIndex] = currentProperty;
-            return { 
+            return {
                 currentProperty: currentProperty,
                 properties: properties
             }
@@ -51,6 +56,25 @@ export class PropertiesAdmin extends React.Component {
         const currentProperty = this.state.properties[propertyIndex];
         this.setState({
             currentProperty: currentProperty
+        });
+    }
+
+
+    handleDeletePropertySelection(event) {
+        if(event && event.target.dataset.propertyIndex) {
+            const propertyIndex = parseInt(event.target.dataset.propertyIndex);
+            const currentProperty = this.state.properties[propertyIndex];
+            this.setState({
+                currentProperty: currentProperty,
+            });
+        }
+        
+        this.displayPropertyDeletionModal();
+    }
+
+    displayPropertyDeletionModal() {
+        this.setState({
+            displayPropertyDeletionModal: !this.state.displayPropertyDeletionModal
         });
     }
 
@@ -78,15 +102,49 @@ export class PropertiesAdmin extends React.Component {
             )
     }
 
+    deleteProperty(event) {
+        const owner = getSessionCookie();
+        fetch(`${REICEPT_API_URL}owners/${owner.ID}/properties/${this.state.currentProperty.ID}`, {
+            method: 'DELETE'
+        })
+            .then(
+                (result) => {
+                    result.json()
+                        .then((data) => {
+                            console.log(data);
+                            this.componentDidMount();
+                            this.setState(prevState => {
+                                let properties = Object.assign([], prevState.properties);
+                                const propertyIndex= this.state.properties.findIndex(property => property.ID === this.state.currentProperty.ID);
+                                properties.splice(propertyIndex, 1);
+                                return {
+                                    currentProperty: null,
+                                    properties: properties
+                                }
+                            });
+                        })
+                },
+
+                (error) => {
+                    console.error(error);
+                    this.setState({
+                        error
+                    });
+                }
+            )
+        this.displayPropertyDeletionModal();
+        event.preventDefault()
+    }
+
     handleSubmit(event) {
         const owner = getSessionCookie();
         const property = this.state.currentProperty;
         let method;
         let route;
-        if(property.ID) {
+        if (property.ID) {
             method = 'PUT';
             route = `/${this.state.currentProperty.ID}`;
-            
+
         } else {
             method = 'POST';
             route = '';
@@ -133,6 +191,7 @@ export class PropertiesAdmin extends React.Component {
         } else {
             return (
                 <>
+                    <ConfirmationModal showModal={this.state.displayPropertyDeletionModal} handleValidate={this.deleteProperty} closeModal={this.displayPropertyDeletionModal} />
                     <Row>
                         <Col align="right">
                             <Button onClick={this.handleAdd} variant="success">Ajouter bien</Button>
@@ -142,9 +201,16 @@ export class PropertiesAdmin extends React.Component {
                         {properties.map((property, index) => (
                             <Card key={index}>
                                 <Card.Header>
-                                    <Accordion.Toggle as={Button} variant="link" onClick={this.setCurrentProperty} data-property-index={index} eventKey={index + 1}>
-                                        {property.name} - {property.adress}
-                                    </Accordion.Toggle>
+                                    <Row>
+                                        <Col>
+                                            <Accordion.Toggle as={Button} variant="link" onClick={this.setCurrentProperty} data-property-index={index} eventKey={index + 1}>
+                                                {property.name} - {property.adress}
+                                            </Accordion.Toggle>
+                                        </Col>
+                                        <Col align="right" md={2}>
+                                            <Button onClick={this.handleDeletePropertySelection} data-property-index={index} variant="danger">Supprimer bien</Button>
+                                        </Col>
+                                    </Row>
                                 </Card.Header>
                                 <Accordion.Collapse eventKey={index + 1}>
                                     <Card.Body>
