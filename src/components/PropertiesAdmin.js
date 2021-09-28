@@ -61,13 +61,11 @@ export class PropertiesAdmin extends React.Component {
 
 
     handleDeletePropertySelection(event) {
-        if(event && event.target.dataset.propertyIndex) {
-            const propertyIndex = parseInt(event.target.dataset.propertyIndex);
-            const currentProperty = this.state.properties[propertyIndex];
-            this.setState({
-                currentProperty: currentProperty,
-            });
-        }
+        const propertyIndex = parseInt(event.target.dataset.propertyIndex);
+        const currentProperty = this.state.properties[propertyIndex];
+        this.setState({
+            currentProperty: currentProperty,
+        });
         
         this.displayPropertyDeletionModal();
     }
@@ -104,34 +102,47 @@ export class PropertiesAdmin extends React.Component {
 
     deleteProperty(event) {
         const owner = getSessionCookie();
-        fetch(`${REICEPT_API_URL}owners/${owner.ID}/properties/${this.state.currentProperty.ID}`, {
-            method: 'DELETE'
-        })
-            .then(
-                (result) => {
-                    result.json()
-                        .then((data) => {
-                            console.log(data);
-                            this.componentDidMount();
-                            this.setState(prevState => {
-                                let properties = Object.assign([], prevState.properties);
-                                const propertyIndex= this.state.properties.findIndex(property => property.ID === this.state.currentProperty.ID);
-                                properties.splice(propertyIndex, 1);
-                                return {
-                                    currentProperty: null,
-                                    properties: properties
-                                }
-                            });
-                        })
-                },
-
-                (error) => {
-                    console.error(error);
-                    this.setState({
-                        error
-                    });
+        if(this.state.currentProperty.ID) {
+            fetch(`${REICEPT_API_URL}owners/${owner.ID}/properties/${this.state.currentProperty.ID}`, {
+                method: 'DELETE'
+            })
+                .then(
+                    (result) => {
+                        result.json()
+                            .then((data) => {
+                                console.log(data);
+                                this.componentDidMount();
+                                this.setState(prevState => {
+                                    let properties = Object.assign([], prevState.properties);
+                                    const propertyIndex= this.state.properties.findIndex(property => property === this.state.currentProperty);
+                                    properties.splice(propertyIndex, 1);
+                                    return {
+                                        currentProperty: null,
+                                        properties: properties
+                                    }
+                                });
+                            })
+                    },
+    
+                    (error) => {
+                        console.error(error);
+                        this.setState({
+                            error
+                        });
+                    }
+                )
+        } else {
+            this.setState(prevState => {
+                let properties = Object.assign([], prevState.properties);
+                const propertyIndex= this.state.properties.findIndex(property => property === this.state.currentProperty);
+                properties.splice(propertyIndex, 1);
+                return {
+                    currentProperty: null,
+                    properties: properties
                 }
-            )
+            });
+        }
+        
         this.displayPropertyDeletionModal();
         event.preventDefault()
     }
