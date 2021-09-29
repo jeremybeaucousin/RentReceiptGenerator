@@ -69,6 +69,7 @@ export function deleteTenant(propertyId, tenant, callbackResult, callbackError) 
 
                 (error) => {
                     console.error(error);
+                    callbackError(error);
                 }
             )
     }

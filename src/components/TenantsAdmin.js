@@ -6,8 +6,6 @@ import './TenantsAdmin.css';
 
 import { TenantAdmin } from './TenantAdmin';
 
-import { getSessionCookie } from "../model/Session";
-
 import Tenant from "../model/Tenant";
 import { ConfirmationModal } from './ConfirmationModal';
 
@@ -73,7 +71,6 @@ export class TenantsAdmin extends React.Component {
     }
 
     deleteTenant(event) {
-        const owner = getSessionCookie();
         if(this.state.currentTenant.ID) {
              const callbackResult = (data) => {
                 console.log(data);

@@ -14,13 +14,13 @@ export function getOwners(callbackResult, callbackError) {
 }
 
 export function saveOrUpdateOwner(owner, callbackResult, callbackError) {
-    if(owner) {
+    if (owner) {
         let method;
         let route;
         if (owner.ID) {
             method = 'PUT';
             route = `/${owner.ID}`;
-    
+
         } else {
             method = 'POST';
             route = '';
@@ -35,14 +35,35 @@ export function saveOrUpdateOwner(owner, callbackResult, callbackError) {
                         .then((data) => {
                             callbackResult(data);
                         })
-    
+
                 },
-    
+
                 (error) => {
                     console.error(error);
                     callbackError(error);
                 }
             );
     }
-    
+
+}
+
+export function deleteOwner(owner, callbackResult, callbackError) {
+    if (owner) {
+        fetch(`${process.env.REACT_APP_RENT_RECEIPT_API_URL}owners/${owner.ID}`, {
+            method: 'DELETE'
+        })
+            .then(
+                (result) => {
+                    result.json()
+                        .then((data) => {
+                            callbackResult(data);
+                        })
+                },
+
+                (error) => {
+                    console.error(error);
+                    callbackError(error);
+                }
+            )
+    }
 }

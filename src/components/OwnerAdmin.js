@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Tabs, Tab, Form, Button, Modal, ModalTitle, ModalBody, ModalFooter } from 'react-bootstrap';
+import { Tabs, Tab, Form, Button, Modal, ModalTitle, ModalBody, ModalFooter, FormGroup, Col, Row } from 'react-bootstrap';
 
 import { getSessionCookie, clearSession } from "../model/Session";
 
@@ -8,7 +8,7 @@ import { OwnerForm } from './OwnerForm'
 
 import { PropertiesAdmin } from './PropertiesAdmin'
 
-import { saveOrUpdateOwner } from '../services/Owner'
+import { deleteOwner, saveOrUpdateOwner } from '../services/Owner'
 
 export class OwnerAdmin extends React.Component {
     constructor(props) {
@@ -17,11 +17,12 @@ export class OwnerAdmin extends React.Component {
         this.state = {
             owner: owner,
             showModal: false,
-
+            delete: false
         }
 
         this.handleChanges = this.handleChanges.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleDeleteOwner = this.handleDeleteOwner.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.handleValidate = this.handleValidate.bind(this);
     }
@@ -36,7 +37,16 @@ export class OwnerAdmin extends React.Component {
 
     handleSubmit(event) {
         this.setState({
-            showModal: true
+            showModal: true,
+            delete: false
+        });
+        event.preventDefault()
+    }
+
+    handleDeleteOwner(event) {
+        this.setState({
+            showModal: true,
+            delete: true
         });
         event.preventDefault()
     }
@@ -47,7 +57,14 @@ export class OwnerAdmin extends React.Component {
             this.closeModal();
             window.location.reload();
         }
-        saveOrUpdateOwner(this.state.owner, callbackResult);
+        if (this.state.delete) {
+            deleteOwner(this.state.owner, callbackResult);
+            this.setState({
+                delete: false
+            });
+        } else {
+            saveOrUpdateOwner(this.state.owner, callbackResult);
+        }
     }
 
     closeModal() {
@@ -63,9 +80,20 @@ export class OwnerAdmin extends React.Component {
                     <Tab eventKey="owner" title="Propriétaire">
                         <Form onSubmit={this.handleSubmit}>
                             <OwnerForm owner={this.state.owner} handleChanges={this.handleChanges} />
-                            <Button variant="primary" type="submit">
-                                Enregistrer
-                            </Button>
+                            <FormGroup>
+                                <Row>
+                                    <Col md={6}>
+                                        <Button variant="primary" type="submit">
+                                            Enregistrer
+                                        </Button>
+                                    </Col>
+                                    <Col>
+                                        <Button variant="danger" onClick={this.handleDeleteOwner}>
+                                            Supprimer compte
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </FormGroup>
                         </Form>
                     </Tab>
                     <Tab eventKey="properties" title="Biens">
@@ -75,7 +103,7 @@ export class OwnerAdmin extends React.Component {
 
                 <Modal show={this.state.showModal} onHide={this.closeModal}>
                     <Modal.Header closeButton>
-                        <ModalTitle>Enregistrement des informations du propriétaire</ModalTitle>
+                        <ModalTitle>Enregistrement ou suppression</ModalTitle>
                     </Modal.Header>
 
                     <ModalBody>

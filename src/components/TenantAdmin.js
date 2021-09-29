@@ -4,12 +4,8 @@ import { Button, Form, FormGroup } from 'react-bootstrap';
 
 import './TenantAdmin.css';
 
-import { getSessionCookie } from "../model/Session";
-
 import { TenantForm } from './TenantForm';
 import { saveOrUpdateTenant } from '../services/Tenant';
-
-const REICEPT_API_URL = process.env.REACT_APP_RENT_RECEIPT_API_URL;
 
 export class TenantAdmin extends React.Component {
     constructor(props) {

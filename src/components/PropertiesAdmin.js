@@ -4,8 +4,6 @@ import { Button, Accordion, Card, Form, FormControl, InputGroup, Row, Col, FormG
 
 import './PropertiesAdmin.css';
 
-import { getSessionCookie } from "../model/Session";
-
 import Property from "../model/Property";
 
 import { TenantsAdmin } from './TenantsAdmin';
@@ -95,7 +93,6 @@ export class PropertiesAdmin extends React.Component {
     }
 
     deleteProperty(event) {
-        const owner = getSessionCookie();
         if (this.state.currentProperty.ID) {
             const callbackResult = (data) => {
                 console.log(data);
