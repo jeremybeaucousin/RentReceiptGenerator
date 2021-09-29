@@ -59,12 +59,12 @@ export class OwnerAdmin extends React.Component {
             window.location.reload();
         }
         if (this.state.delete) {
-            // Delete properties before delting owner
+            // Delete properties before deleting
             const callbackPropertiesResult = (data) => {
                 data.forEach(property => deleteProperty(property));
+                deleteOwner(this.state.owner, callbackResult);
             }
             getProperties(callbackPropertiesResult)
-            deleteOwner(this.state.owner, callbackResult);
             this.setState({
                 delete: false
             });

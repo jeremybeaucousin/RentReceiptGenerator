@@ -33,14 +33,19 @@ export function saveOrUpdateOwner(owner, callbackResult, callbackError) {
                 (result) => {
                     result.json()
                         .then((data) => {
-                            callbackResult(data);
+                            if (callbackResult) {
+                                callbackResult(data);
+                            }
+
                         })
 
                 },
 
                 (error) => {
                     console.error(error);
-                    callbackError(error);
+                    if (callbackError) {
+                        callbackError(error);
+                    }
                 }
             );
     }

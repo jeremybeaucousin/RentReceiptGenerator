@@ -19,7 +19,7 @@ export function getProperties(callbackResult, callbackError) {
 }
 
 export function saveOrUpdateProperty(property, callbackResult, callbackError) {
-    if(property) {
+    if (property) {
         const owner = getSessionCookie();
         let method;
         let route;
@@ -53,7 +53,7 @@ export function saveOrUpdateProperty(property, callbackResult, callbackError) {
 }
 
 export function deleteProperty(property, callbackResult, callbackError) {
-    if(property) {
+    if (property) {
         const owner = getSessionCookie();
         fetch(`${process.env.REACT_APP_RENT_RECEIPT_API_URL}owners/${owner.ID}/properties/${property.ID}`, {
             method: 'DELETE'
@@ -62,13 +62,17 @@ export function deleteProperty(property, callbackResult, callbackError) {
                 (result) => {
                     result.json()
                         .then((data) => {
-                            callbackResult(data);
+                            if (callbackResult) {
+                                callbackResult(data);
+                            }
                         })
                 },
-    
+
                 (error) => {
                     console.error(error);
-                    callbackError(error);
+                    if (callbackError) {
+                        callbackError(error);
+                    }
                 }
             )
     }

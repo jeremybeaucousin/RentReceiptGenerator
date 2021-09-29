@@ -101,6 +101,7 @@ export class CreateOwner extends React.Component {
             window.location.href = "/";
         }
         saveOrUpdateOwner(this.state.owner, callbackResult);
+        event.preventDefault();
     }
 
     render() {
