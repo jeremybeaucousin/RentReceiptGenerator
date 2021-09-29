@@ -125,7 +125,6 @@ export class CreateOwner extends React.Component {
                                 <div key={index} >
                                     <h3>{tenant.firstname} - {tenant.lastname}</h3>
                                     <TenantForm tenant={tenant} handleChanges={this.handleChanges} />
-                                    <PropertyForm property={property} handleChanges={this.handleChanges} />
                                     <FormGroup>
                                         <Button onClick={this.handleDeleteTenant} data-property-index={propertyIndex} data-tenant-index={propertyIndex} variant="danger">Supprimer locataire</Button>
                                     </FormGroup>
