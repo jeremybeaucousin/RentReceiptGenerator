@@ -180,7 +180,7 @@ export class PropertiesAdmin extends React.Component {
                                     <Row>
                                         <Col>
                                             <Accordion.Toggle as={Button} variant="link" onClick={this.setCurrentProperty} data-property-index={index} eventKey={index + 1}>
-                                                {property.name} - {property.adress}
+                                                Bien : {property.name} - {property.adress}
                                             </Accordion.Toggle>
                                         </Col>
                                         <Col align="right" md={2}>

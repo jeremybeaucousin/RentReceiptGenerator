@@ -100,7 +100,12 @@ export class CreateOwner extends React.Component {
             console.log(data);
             window.location.href = "/";
         }
-        saveOrUpdateOwner(this.state.owner, callbackResult);
+        const owner = this.state.owner;
+        owner.properties.forEach(property => {
+            property.ID = undefined
+            property.tenants.forEach(tenant => tenant.ID = undefined)
+        });
+        saveOrUpdateOwner(owner, callbackResult);
         event.preventDefault();
     }
 
