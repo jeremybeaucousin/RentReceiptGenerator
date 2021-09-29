@@ -31,7 +31,7 @@ export class OwnerForm extends React.Component {
 
     render() {
         return (
-            <div>
+            <>
                 <FormGroup className="row">
                     <div className="col-sm-6">
                         <label htmlFor="RentReceiptFormOwnerFirstName"> Prénom du propriétaire : </label>
@@ -47,7 +47,7 @@ export class OwnerForm extends React.Component {
                     <label htmlFor="RentReceiptFormOwnerAdress"> Adresse du propriétaire : </label>
                     <textarea className="form-control textarea-autosize" name="adress" id="RentReceiptFormOwnerAdress" value={this.state.owner.adress} onChange={this.handleOwnerChange} />
                 </FormGroup>
-            </div>
+            </>
         );
     }
 

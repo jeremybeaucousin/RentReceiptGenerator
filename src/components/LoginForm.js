@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import { Link } from "react-router-dom";
+
 import { Redirect } from "react-router";
 
 import { Button, Col, Form, FormControl, FormGroup, FormLabel, Row } from 'react-bootstrap';
@@ -78,9 +80,22 @@ export class LoginForm extends Component {
                                 </FormControl>
                             </FormGroup>
 
-                            <Button variant="primary" type="submit">
-                                Selectionner
-                            </Button>
+                            <FormGroup>
+                                <Row>
+                                    <Col md={6}>
+                                        <Button variant="primary" type="submit">
+                                            Selectionner
+                                        </Button>
+                                    </Col>
+                                    <Col>
+                                        <Link to="/createowner">
+                                            <Button variant="success">
+                                                Créer compte propriétaire
+                                            </Button>
+                                        </Link>
+                                    </Col>
+                                </Row>
+                            </FormGroup>
                         </Form>
                     </Col>
                 </Row>

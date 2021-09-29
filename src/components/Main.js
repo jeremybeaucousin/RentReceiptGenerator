@@ -68,6 +68,7 @@ class Main extends Component {
                         <Switch>
                             <AuthRoute path="/rentreceiptform" component={RentReceiptForm} />
                             <AuthRoute path="/owneradmin" component={OwnerAdmin} />
+                            <Route path="/createowner" component={OwnerAdmin} />
                             <Route path="*" component={LoginForm} />
                         </Switch>
                     </BrowserRouter>
