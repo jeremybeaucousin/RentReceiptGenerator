@@ -9,6 +9,7 @@ import { OwnerForm } from './OwnerForm'
 import { PropertiesAdmin } from './PropertiesAdmin'
 
 import { deleteOwner, saveOrUpdateOwner } from '../services/Owner'
+import { deleteProperty, getProperties } from '../services/Property';
 
 export class OwnerAdmin extends React.Component {
     constructor(props) {
@@ -58,6 +59,11 @@ export class OwnerAdmin extends React.Component {
             window.location.reload();
         }
         if (this.state.delete) {
+            // Delete properties before delting owner
+            const callbackPropertiesResult = (data) => {
+                data.forEach(property => deleteProperty(property));
+            }
+            getProperties(callbackPropertiesResult)
             deleteOwner(this.state.owner, callbackResult);
             this.setState({
                 delete: false

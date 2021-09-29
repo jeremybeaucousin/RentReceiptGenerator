@@ -11,6 +11,7 @@ import './Main.css';
 import { RentReceiptForm } from "./RentReceiptForm/RentReceiptForm";
 import { OwnerAdmin } from './OwnerAdmin'
 import { LoginForm } from './LoginForm'
+import { CreateOwner } from './CreateOwner'
 import AuthRoute from "../model/AuthRoute";
 
 const { REACT_APP_NAME, REACT_APP_VERSION } = process.env;
@@ -68,7 +69,7 @@ class Main extends Component {
                         <Switch>
                             <AuthRoute path="/rentreceiptform" component={RentReceiptForm} />
                             <AuthRoute path="/owneradmin" component={OwnerAdmin} />
-                            <Route path="/createowner" component={OwnerAdmin} />
+                            <Route path="/createowner" component={CreateOwner} />
                             <Route path="*" component={LoginForm} />
                         </Switch>
                     </BrowserRouter>

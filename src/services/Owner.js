@@ -25,7 +25,7 @@ export function saveOrUpdateOwner(owner, callbackResult, callbackError) {
             method = 'POST';
             route = '';
         }
-        fetch(`${process.env.REACT_APP_RENT_RECEIPT_API_URL}owners/${route}`, {
+        fetch(`${process.env.REACT_APP_RENT_RECEIPT_API_URL}owners${route}`, {
             method: method,
             body: JSON.stringify(owner)
         })

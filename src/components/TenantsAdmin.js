@@ -71,19 +71,19 @@ export class TenantsAdmin extends React.Component {
     }
 
     deleteTenant(event) {
-        if(this.state.currentTenant.ID) {
-             const callbackResult = (data) => {
+        if (this.state.currentTenant.ID) {
+            const callbackResult = (data) => {
                 console.log(data);
-                            this.componentDidMount();
-                            this.setState(prevState => {
-                                let tenants = Object.assign([], prevState.tenants);
-                                const tenantIndex = this.state.tenants.findIndex(tenant => tenant === this.state.currentTenant);
-                                tenants.splice(tenantIndex, 1);
-                                return {
-                                    currentTenant: null,
-                                    tenants: tenants
-                                }
-                            });
+                this.componentDidMount();
+                this.setState(prevState => {
+                    let tenants = Object.assign([], prevState.tenants);
+                    const tenantIndex = this.state.tenants.findIndex(tenant => tenant === this.state.currentTenant);
+                    tenants.splice(tenantIndex, 1);
+                    return {
+                        currentTenant: null,
+                        tenants: tenants
+                    }
+                });
             }
 
             const callbackError = (error) => {
@@ -104,7 +104,7 @@ export class TenantsAdmin extends React.Component {
                 }
             });
         }
-        
+
         this.displayTenantDeletionModal();
         event.preventDefault()
     }
