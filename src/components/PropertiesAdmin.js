@@ -11,7 +11,7 @@ import Property from "../model/Property";
 import { TenantsAdmin } from './TenantsAdmin';
 import { ConfirmationModal } from './ConfirmationModal';
 
-const REICEPT_API_URL = process.env.REACT_APP_RENT_RECEIPT_API_URL;
+import { deleteProperty, saveOrUpdateProperty, getProperties } from '../services/Property'
 
 export class PropertiesAdmin extends React.Component {
     constructor(props) {
@@ -66,7 +66,7 @@ export class PropertiesAdmin extends React.Component {
         this.setState({
             currentProperty: currentProperty,
         });
-        
+
         this.displayPropertyDeletionModal();
     }
 
@@ -77,64 +77,51 @@ export class PropertiesAdmin extends React.Component {
     }
 
     componentDidMount() {
-        const owner = getSessionCookie();
-        fetch(`${process.env.REACT_APP_RENT_RECEIPT_API_URL}owners/${owner.ID}/properties`)
-            .then(
-                (result) => {
-                    result.json()
-                        .then((data) => {
-                            this.setState({
-                                isLoaded: true,
-                                properties: data
-                            });
-                        })
-                },
+        const callbackResult = (data) => {
+            this.setState({
+                isLoaded: true,
+                properties: data
+            });
+        }
 
-                (error) => {
-                    console.error(error);
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
-                }
-            )
+        const callbackError = (error) => {
+            this.setState({
+                isLoaded: true,
+                error
+            });
+        }
+
+        getProperties(callbackResult, callbackError);
     }
 
     deleteProperty(event) {
         const owner = getSessionCookie();
-        if(this.state.currentProperty.ID) {
-            fetch(`${REICEPT_API_URL}owners/${owner.ID}/properties/${this.state.currentProperty.ID}`, {
-                method: 'DELETE'
-            })
-                .then(
-                    (result) => {
-                        result.json()
-                            .then((data) => {
-                                console.log(data);
-                                this.componentDidMount();
-                                this.setState(prevState => {
-                                    let properties = Object.assign([], prevState.properties);
-                                    const propertyIndex= this.state.properties.findIndex(property => property === this.state.currentProperty);
-                                    properties.splice(propertyIndex, 1);
-                                    return {
-                                        currentProperty: null,
-                                        properties: properties
-                                    }
-                                });
-                            })
-                    },
-    
-                    (error) => {
-                        console.error(error);
-                        this.setState({
-                            error
-                        });
+        if (this.state.currentProperty.ID) {
+            const callbackResult = (data) => {
+                console.log(data);
+                this.componentDidMount();
+                this.setState(prevState => {
+                    let properties = Object.assign([], prevState.properties);
+                    const propertyIndex = this.state.properties.findIndex(property => property === this.state.currentProperty);
+                    properties.splice(propertyIndex, 1);
+                    return {
+                        currentProperty: null,
+                        properties: properties
                     }
-                )
+                });
+            }
+
+            const callbackError = (error) => {
+                this.setState({
+                    error
+                });
+            }
+
+            deleteProperty(this.state.currentProperty, callbackResult, callbackError);
         } else {
             this.setState(prevState => {
                 let properties = Object.assign([], prevState.properties);
-                const propertyIndex= this.state.properties.findIndex(property => property === this.state.currentProperty);
+                const propertyIndex = this.state.properties.findIndex(property => property === this.state.currentProperty);
                 properties.splice(propertyIndex, 1);
                 return {
                     currentProperty: null,
@@ -142,45 +129,28 @@ export class PropertiesAdmin extends React.Component {
                 }
             });
         }
-        
+
         this.displayPropertyDeletionModal();
         event.preventDefault()
     }
 
     handleSubmit(event) {
-        const owner = getSessionCookie();
-        const property = this.state.currentProperty;
-        let method;
-        let route;
-        if (property.ID) {
-            method = 'PUT';
-            route = `/${this.state.currentProperty.ID}`;
+        const callbackResult = (data) => {
+            console.log(data);
+            this.componentDidMount();
+            this.setState({
+                currentProperty: data
+            });
 
-        } else {
-            method = 'POST';
-            route = '';
         }
 
-        fetch(`${REICEPT_API_URL}owners/${owner.ID}/properties${route}`, {
-            method: method,
-            body: JSON.stringify(property)
-        })
-            .then(
-                (result) => {
-                    result.json()
-                        .then((data) => {
-                            console.log(data);
-                            this.componentDidMount();
-                            this.setState({
-                                currentProperty: data
-                            });
-                        })
-                },
+        const callbackError = (error) => {
+            this.setState({
+                error
+            });
+        }
 
-                (error) => {
-                    console.error(error);
-                }
-            );
+        saveOrUpdateProperty(this.state.currentProperty, callbackResult, callbackError);
         event.preventDefault()
     }
 
@@ -272,7 +242,7 @@ export class PropertiesAdmin extends React.Component {
                                             <FormGroup>
                                                 <Button variant="primary" type="submit">
                                                     Enregistrer
-                                            </Button>
+                                                </Button>
                                             </FormGroup>
                                         </Form>
                                         {this.state.currentProperty && property.ID && this.state.currentProperty.ID === property.ID &&

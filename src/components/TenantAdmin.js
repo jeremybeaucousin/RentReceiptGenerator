@@ -7,6 +7,7 @@ import './TenantAdmin.css';
 import { getSessionCookie } from "../model/Session";
 
 import { TenantForm } from './TenantForm';
+import { saveOrUpdateTenant } from '../services/Tenant';
 
 const REICEPT_API_URL = process.env.REACT_APP_RENT_RECEIPT_API_URL;
 
@@ -30,34 +31,11 @@ export class TenantAdmin extends React.Component {
     }
 
     handleSubmit(event) {
-        const owner = getSessionCookie();
-        let method;
-        let route;
-        if(this.state.tenant.ID) {
-            method = 'PUT';
-            route = `/${this.state.tenant.ID}`;
-            
-        } else {
-            method = 'POST';
-            route = '';
+        const callbackResult = (data) => {
+            console.log(data);
         }
-        fetch(`${REICEPT_API_URL}owners/${owner.ID}/properties/${this.props.propertyId}/tenants${route}`, {
-            method: method,
-            body: JSON.stringify(this.state.tenant)
-        })
-            .then(
-                (result) => {
-                    console.log(result);
-                    result.json()
-                        .then((data) => {
-                            console.log(data);
-                        })
-                },
 
-                (error) => {
-                    console.error(error);
-                }
-            );
+        saveOrUpdateTenant(this.props.propertyId, this.state.tenant, callbackResult);
         event.preventDefault()
     }
 

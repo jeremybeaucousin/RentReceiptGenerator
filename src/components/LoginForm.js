@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 
+import { Redirect } from "react-router";
+
 import { Button, Col, Form, FormControl, FormGroup, FormLabel, Row } from 'react-bootstrap';
 
 import './LoginForm.css';
 
 import { setSessionCookie, getSessionCookie } from "../model/Session";
-import { Redirect } from "react-router";
+
+import { getOwners } from '../services/Owner'
 
 export class LoginForm extends Component {
 
@@ -22,22 +25,17 @@ export class LoginForm extends Component {
     }
 
     componentDidMount() {
-        fetch(process.env.REACT_APP_RENT_RECEIPT_API_URL + "/owners")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState({
-                        owners: result
-                    });
-                },
-
-                (error) => {
-                    console.error(error);
-                    this.setState({
-                        error
-                    });
-                }
-            )
+        const callbackResult = (result) => {
+            this.setState({
+                owners: result
+            });
+        }
+        const callbackError = (error) => {
+            this.setState({
+                error
+            });
+        }
+        getOwners(callbackResult, callbackError);
     }
 
     ownerSelection(event) {
@@ -61,7 +59,7 @@ export class LoginForm extends Component {
         const session = getSessionCookie();
         if (error) {
             return <div>Error: {error.message}</div>;
-        } else if(session) {
+        } else if (session) {
             return <Redirect to="/rentreceiptform" />
         } else {
             return (

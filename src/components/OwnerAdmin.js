@@ -8,7 +8,8 @@ import { OwnerForm } from './OwnerForm'
 
 import { PropertiesAdmin } from './PropertiesAdmin'
 
-const REICEPT_API_URL = process.env.REACT_APP_RENT_RECEIPT_API_URL;
+import { saveOrUpdateOwner } from '../services/Owner'
+
 export class OwnerAdmin extends React.Component {
     constructor(props) {
         super(props);
@@ -40,26 +41,13 @@ export class OwnerAdmin extends React.Component {
         event.preventDefault()
     }
 
-    handleValidate(event) {
-        fetch(`${REICEPT_API_URL}owners/${this.state.owner.ID}`, {
-            method: 'PUT',
-            body: JSON.stringify(this.state.owner)
-        })
-            .then(
-                (result) => {
-                    result.json()
-                        .then((data) => {
-                            clearSession();
-                            this.closeModal();
-                            window.location.reload();
-                        })
-
-                },
-
-                (error) => {
-                    console.error(error);
-                }
-            );
+    handleValidate() {
+        const callbackResult = () => {
+            clearSession();
+            this.closeModal();
+            window.location.reload();
+        }
+        saveOrUpdateOwner(this.state.owner, callbackResult);
     }
 
     closeModal() {
@@ -77,7 +65,7 @@ export class OwnerAdmin extends React.Component {
                             <OwnerForm owner={this.state.owner} handleChanges={this.handleChanges} />
                             <Button variant="primary" type="submit">
                                 Enregistrer
-                        </Button>
+                            </Button>
                         </Form>
                     </Tab>
                     <Tab eventKey="properties" title="Biens">

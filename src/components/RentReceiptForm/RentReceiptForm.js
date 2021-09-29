@@ -17,6 +17,10 @@ import { TenantForm } from "../TenantForm";
 import { DatesForm } from "./DatesForm";
 import { PdfReiceptRender } from "./PdfReiceptRender";
 
+import { getProperties } from '../../services/Property';
+
+import { getTenants } from '../../services/Tenant';
+
 export class RentReceiptForm extends React.Component {
     constructor(props) {
         super(props);
@@ -100,66 +104,56 @@ export class RentReceiptForm extends React.Component {
     }
 
     componentDidMount() {
-        fetch(`${process.env.REACT_APP_RENT_RECEIPT_API_URL}owners/${this.state.currentReceipt.owner.ID}/properties`)
-            .then(
-                (result) => {
-                    result.json()
-                        .then((data) => {
-                            const currentProperty = (data && data.length > 0) ? data[0] : null;
-                            this.setState(prevState => {
-                                let currentReceipt = Object.assign(Object.create(Object.getPrototypeOf(prevState.currentReceipt)), prevState.currentReceipt);
+        const callbackResult = (data) => {
+            const currentProperty = (data && data.length > 0) ? data[0] : null;
+            this.setState(prevState => {
+                let currentReceipt = Object.assign(Object.create(Object.getPrototypeOf(prevState.currentReceipt)), prevState.currentReceipt);
 
-                                if (currentProperty) {
-                                    currentReceipt.property = new Property(currentProperty.ID, currentProperty.name, currentProperty.adress, currentProperty.rent, currentProperty.charges);
-                                    currentReceipt.amountPaid = currentProperty.rent + currentProperty.charges;
-                                    this.getPropertyTenants(currentProperty.ID);
-                                }
-                                return {
-                                    currentReceipt: currentReceipt,
-                                    isLoaded: true,
-                                    properties: data
-                                };
-                            });
-                        })
-                },
-
-                (error) => {
-                    console.error(error);
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
+                if (currentProperty) {
+                    currentReceipt.property = new Property(currentProperty.ID, currentProperty.name, currentProperty.adress, currentProperty.rent, currentProperty.charges);
+                    currentReceipt.amountPaid = currentProperty.rent + currentProperty.charges;
+                    this.getPropertyTenants(currentProperty.ID);
                 }
-            )
+                return {
+                    currentReceipt: currentReceipt,
+                    isLoaded: true,
+                    properties: data
+                };
+            });
+        }
+
+        const callbackError = (error) => {
+            this.setState({
+                isLoaded: true,
+                error
+            });
+        }
+
+        getProperties(callbackResult, callbackError);
     }
 
     getPropertyTenants(propertyId) {
-        fetch(`${process.env.REACT_APP_RENT_RECEIPT_API_URL}owners/${this.state.currentReceipt.owner.ID}/properties/${propertyId}/tenants`)
-            .then(
-                (result) => {
-                    result.json()
-                        .then((data) => {
-                            const currentTenant = (data && data.length > 0) ? data[0] : null;
-                            this.setState(prevState => {
-                                let currentReceipt = Object.assign(Object.create(Object.getPrototypeOf(prevState.currentReceipt)), prevState.currentReceipt);
-                                if (currentTenant) {
-                                    currentReceipt.tenant = new Tenant(currentTenant.ID, currentTenant.firstname, currentTenant.lastname, currentTenant.adress);
-                                }
-                                return {
-                                    currentReceipt: currentReceipt,
-                                    tenants: data
-                                };
-                            });
-                        })
-                },
-
-                (error) => {
-                    console.error(error);
-                    this.setState({
-                        error
-                    });
+        const callbackResult = (data) => {
+            const currentTenant = (data && data.length > 0) ? data[0] : null;
+            this.setState(prevState => {
+                let currentReceipt = Object.assign(Object.create(Object.getPrototypeOf(prevState.currentReceipt)), prevState.currentReceipt);
+                if (currentTenant) {
+                    currentReceipt.tenant = new Tenant(currentTenant.ID, currentTenant.firstname, currentTenant.lastname, currentTenant.adress);
                 }
-            )
+                return {
+                    currentReceipt: currentReceipt,
+                    tenants: data
+                };
+            });
+        }
+
+        const callbackError = (error) => {
+            this.setState({
+                error
+            });
+        }
+
+        getTenants(propertyId, callbackResult, callbackError);
     }
 
     _exportPdfTable = () => {

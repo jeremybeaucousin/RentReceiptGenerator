@@ -11,6 +11,8 @@ import { getSessionCookie } from "../model/Session";
 import Tenant from "../model/Tenant";
 import { ConfirmationModal } from './ConfirmationModal';
 
+import { deleteTenant, getTenants } from '../services/Tenant';
+
 export class TenantsAdmin extends React.Component {
     constructor(props) {
         super(props);
@@ -28,27 +30,21 @@ export class TenantsAdmin extends React.Component {
     }
 
     componentDidMount() {
-        const owner = getSessionCookie();
-        fetch(`${process.env.REACT_APP_RENT_RECEIPT_API_URL}owners/${owner.ID}/properties/${this.props.propertyId}/tenants`)
-            .then(
-                (result) => {
-                    result.json()
-                        .then((data) => {
-                            this.setState({
-                                isLoaded: true,
-                                tenants: data
-                            });
-                        })
-                },
+        const callbackResult = (data) => {
+            this.setState({
+                isLoaded: true,
+                tenants: data
+            });
+        }
 
-                (error) => {
-                    console.error(error);
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
-                }
-            )
+        const callbackError = (error) => {
+            this.setState({
+                isLoaded: true,
+                error
+            });
+        }
+
+        getTenants(this.props.propertyId, callbackResult, callbackError);
     }
 
     handleDeleteTenentSelection(event) {
@@ -79,34 +75,27 @@ export class TenantsAdmin extends React.Component {
     deleteTenant(event) {
         const owner = getSessionCookie();
         if(this.state.currentTenant.ID) {
-            fetch(`${process.env.REACT_APP_RENT_RECEIPT_API_URL}owners/${owner.ID}/properties/${this.props.propertyId}/tenants/${this.state.currentTenant.ID}`, {
-                method: 'DELETE'
-            })
-                .then(
-                    (result) => {
-                        result.json()
-                            .then((data) => {
-                                console.log(data);
-                                this.componentDidMount();
-                                this.setState(prevState => {
-                                    let tenants = Object.assign([], prevState.tenants);
-                                    const tenantIndex = this.state.tenants.findIndex(tenant => tenant === this.state.currentTenant);
-                                    tenants.splice(tenantIndex, 1);
-                                    return {
-                                        currentTenant: null,
-                                        tenants: tenants
-                                    }
-                                });
-                            })
-                    },
-    
-                    (error) => {
-                        console.error(error);
-                        this.setState({
-                            error
-                        });
-                    }
-                )
+             const callbackResult = (data) => {
+                console.log(data);
+                            this.componentDidMount();
+                            this.setState(prevState => {
+                                let tenants = Object.assign([], prevState.tenants);
+                                const tenantIndex = this.state.tenants.findIndex(tenant => tenant === this.state.currentTenant);
+                                tenants.splice(tenantIndex, 1);
+                                return {
+                                    currentTenant: null,
+                                    tenants: tenants
+                                }
+                            });
+            }
+
+            const callbackError = (error) => {
+                this.setState({
+                    error
+                });
+            }
+
+            deleteTenant(this.props.propertyId, this.state.currentTenant, callbackResult, callbackError);
         } else {
             this.setState(prevState => {
                 let tenants = Object.assign([], prevState.tenants);
