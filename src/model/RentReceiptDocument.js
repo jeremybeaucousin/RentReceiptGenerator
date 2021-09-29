@@ -10,6 +10,9 @@ export function getDocumentDefinition(receipt) {
   const periodeStart = convertDateToDisplayedString(receipt.periodeStart);
   const periodeEnd = convertDateToDisplayedString(receipt.periodeEnd);
   const paidDate = convertDateToDisplayedString(receipt.paidDate);
+  const propertyAdress = (receipt.property) ? receipt.property.adress : "";
+  const propertyRent = (receipt.property) ? receipt.property.rent : "";
+  const propertyCharges = (receipt.property) ? receipt.property.charges : "";
   const tenantFirstName = (receipt.tenant) ? receipt.tenant.firstname : "";
   const tenantLastName = (receipt.tenant) ? receipt.tenant.lastname : "";
   const tenantAddress = (receipt.tenant) ? receipt.tenant.adress : "";
@@ -74,7 +77,7 @@ export function getDocumentDefinition(receipt) {
         decoration: 'underline',
       },
       {
-        text: `${receipt.property.adress}`,
+        text: `${propertyAdress}`,
         alignment: 'center',
       },
       {
@@ -87,11 +90,11 @@ export function getDocumentDefinition(receipt) {
           body: [
             [
               { text: 'Loyer mensuel contractuel' },
-              { text: `${receipt.property.rent} €` },
+              { text: `${propertyRent} €` },
             ],
             [
               { text: 'Charges mensuelles contractuelles' },
-              { text: `${receipt.property.charges} €` },
+              { text: `${propertyCharges} €` },
             ],
             [
               { text: 'Période concerné' },
@@ -99,7 +102,7 @@ export function getDocumentDefinition(receipt) {
             ],
             [
               { text: 'Loyer charge comprise' },
-              { text: `${(receipt.property.rent + receipt.property.charges)} €` },
+              { text: `${(propertyRent + propertyCharges)} €` },
             ]
           ]
         }

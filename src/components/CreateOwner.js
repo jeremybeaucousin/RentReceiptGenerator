@@ -15,7 +15,7 @@ import { TenantForm } from './TenantForm';
 export class CreateOwner extends React.Component {
     constructor(props) {
         super(props);
-        const owner = new Owner();
+        const owner = new Owner(undefined, "", "", "");
         owner.properties = [];
         this.state = {
             owner: owner
@@ -31,7 +31,7 @@ export class CreateOwner extends React.Component {
     handleAddProperty() {
         this.setState(prevState => {
             let currentOwner = Object.assign(Object.create(Object.getPrototypeOf(prevState.owner)), prevState.owner);
-            const property = new Property(currentOwner.properties.length);
+            const property = new Property(currentOwner.properties.length, "", "", 0, 0);
             property.tenants = [];
             currentOwner.properties.push(property);
             return { owner: currentOwner };
@@ -73,7 +73,7 @@ export class CreateOwner extends React.Component {
             let currentOwner = Object.assign(Object.create(Object.getPrototypeOf(prevState.owner)), prevState.owner);
             const property = currentOwner.properties[propertyIndex];
             if (property) {
-                const tenant = new Tenant(property.tenants.length);
+                const tenant = new Tenant(property.tenants.length, "", "", "");
                 tenant.property = propertyIndex;
                 property.tenants.push(tenant);
             }
@@ -84,13 +84,12 @@ export class CreateOwner extends React.Component {
     handleChanges(object) {
         this.setState(prevState => {
             let currentOwner = Object.assign(Object.create(Object.getPrototypeOf(prevState.owner)), prevState.owner);
-            if (object instanceof Property) {
-                currentOwner.properties[object.ID] = object;
-            }
-            else if (object instanceof Tenant) {
-                currentOwner.properties[object.property].tenants[object.ID] = object;
-            } else if (object instanceof Owner) {
+            if (object instanceof Owner) {
                 currentOwner = object;
+            } else if (object instanceof Property) {
+                currentOwner.properties[object.ID] = object;
+            } else if (object instanceof Tenant) {
+                currentOwner.properties[object.property].tenants[object.ID] = object;
             }
             return { owner: currentOwner };
         });
@@ -99,10 +98,9 @@ export class CreateOwner extends React.Component {
     handleSubmit(event) {
         const callbackResult = (data) => {
             console.log(data);
+            window.location.href = "/";
         }
         saveOrUpdateOwner(this.state.owner, callbackResult);
-        window.location.href = "/login";
-        event.preventDefault();
     }
 
     render() {

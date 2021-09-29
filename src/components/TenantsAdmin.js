@@ -58,7 +58,7 @@ export class TenantsAdmin extends React.Component {
     handleAdd(event) {
         this.setState(prevState => {
             let tenants = Object.assign([], prevState.tenants);
-            tenants.push(new Tenant());
+            tenants.push(new Tenant(undefined, "", "", ""));
             return { tenants: tenants }
         });
         event.preventDefault()

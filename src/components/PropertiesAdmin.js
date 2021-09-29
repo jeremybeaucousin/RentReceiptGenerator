@@ -152,7 +152,7 @@ export class PropertiesAdmin extends React.Component {
     handleAdd(event) {
         this.setState(prevState => {
             let properties = Object.assign([], prevState.properties);
-            properties.push(new Property(undefined, "NOUVEAU BIEN", undefined, 0, 0));
+            properties.push(new Property(undefined, "", "", 0, 0));
             return { properties: properties }
         });
         event.preventDefault()
