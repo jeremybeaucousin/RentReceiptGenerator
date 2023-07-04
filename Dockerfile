@@ -4,7 +4,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 
-ARG REACT_APP_RENT_RECEIPT_API_URL=https://rentreceiptapi-s4rewjutdq-od.a.run.app
+ARG REACT_APP_RENT_RECEIPT_API_URL=https://rentreceiptapi-s4rewjutdq-od.a.run.app/
 ENV REACT_APP_RENT_RECEIPT_API_URL=$REACT_APP_RENT_RECEIPT_API_URL
 
 RUN echo "\nREACT_APP_RENT_RECEIPT_API_URL=${REACT_APP_RENT_RECEIPT_API_URL}" >> .env
