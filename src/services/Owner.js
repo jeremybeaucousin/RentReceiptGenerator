@@ -1,5 +1,5 @@
 export function getOwners(callbackResult, callbackError) {
-    fetch(process.env.REACT_APP_RENT_RECEIPT_API_URL + "/owners")
+    fetch(process.env.REACT_APP_RENT_RECEIPT_API_URL + "owners")
         .then(res => res.json())
         .then(
             (result) => {

@@ -22,7 +22,7 @@
   "scripts": {
     "dev": "export NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
     "start": "node server.js",
-    "build": "export NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider && react-scripts build .env",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "heroku-postbuild": "npm run build"
